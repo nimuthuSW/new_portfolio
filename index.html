@@ -1433,7 +1433,7 @@ footer {
       <div class="hero-img-wrap tilt-3d" data-tilt-max="12">
         <div class="tilt-glare"></div>
         <div class="hero-float-tile" aria-hidden="true">N<sub>1</sub></div>
-        <img src="images/nimu_1.png" alt="Nimuthu Witharana"/>
+        <img src="images/nimu_1.png" data-cms-image="heroPortrait" alt="Nimuthu Witharana"/>
         <div class="hero-float-badge">BEng Software Eng.</div>
       </div>
     </div>
@@ -1460,17 +1460,17 @@ footer {
     <div class="about-images reveal-right">
       <div class="about-card-3d tilt-3d" data-tilt-max="10">
         <div class="tilt-glare"></div>
-        <img src="images/badminton.jpg" alt="Badminton court action"/>
+        <img src="images/badminton.jpg" data-cms-image="aboutImg1" alt="Badminton court action"/>
         <span class="about-card-caption">Court Agility · Badminton</span>
       </div>
       <div class="about-card-3d tilt-3d" data-tilt-max="10">
         <div class="tilt-glare"></div>
-        <img src="images/scrabble.jpg" alt="Competitive Scrabble board"/>
+        <img src="images/scrabble.jpg" data-cms-image="aboutImg2" alt="Competitive Scrabble board"/>
         <span class="about-card-caption">Strategic Play · Scrabble</span>
       </div>
       <div class="about-card-3d tilt-3d" data-tilt-max="10">
         <div class="tilt-glare"></div>
-        <img src="images/nimu_2.png" alt="Nimuthu portrait"/>
+        <img src="images/nimu_2.png" data-cms-image="aboutImg3" alt="Nimuthu portrait"/>
         <span class="about-card-caption">Engineering &amp; Leadership</span>
       </div>
     </div>
@@ -1485,22 +1485,22 @@ footer {
     <div class="moments-grid">
       <figure class="moment tilt-3d reveal delay-1" data-tilt-max="8" tabindex="0">
         <div class="tilt-glare"></div>
-        <img src="images/moment_portrait.jpg" alt="Nimuthu smiling with arms crossed" loading="lazy"/>
+        <img src="images/moment_portrait.jpg" data-cms-image="moment1" alt="Nimuthu smiling with arms crossed" loading="lazy"/>
         <figcaption><strong>Hello 👋</strong>Nimuthu Witharana</figcaption>
       </figure>
       <figure class="moment tilt-3d reveal delay-2" data-tilt-max="8" tabindex="0">
         <div class="tilt-glare"></div>
-        <img src="images/moment_scrabble_lanka_1.webp" alt="Nimuthu deep in thought at the Scrabble Lanka Championship" loading="lazy"/>
+        <img src="images/moment_scrabble_lanka_1.webp" data-cms-image="moment2" alt="Nimuthu deep in thought at the Scrabble Lanka Championship" loading="lazy"/>
         <figcaption><strong>Scrabble Lanka Championship '26</strong>Samoda Conference Hall, Galle · Photo: Sarith Photography</figcaption>
       </figure>
       <figure class="moment tilt-3d reveal delay-3" data-tilt-max="8" tabindex="0">
         <div class="tilt-glare"></div>
-        <img src="images/moment_scrabble_lanka_2.webp" alt="Nimuthu playing at the Scrabble Lanka Championship" loading="lazy"/>
+        <img src="images/moment_scrabble_lanka_2.webp" data-cms-image="moment3" alt="Nimuthu playing at the Scrabble Lanka Championship" loading="lazy"/>
         <figcaption><strong>Every tile counts</strong>Scrabble Lanka Championship '26 · Photo: Sarith Photography</figcaption>
       </figure>
       <figure class="moment tilt-3d reveal delay-4" data-tilt-max="8" tabindex="0">
         <div class="tilt-glare"></div>
-        <img src="images/moment_speaking.jpg" alt="Nimuthu speaking into a microphone" loading="lazy" style="object-position: 30% 40%"/>
+        <img src="images/moment_speaking.jpg" data-cms-image="moment4" alt="Nimuthu speaking into a microphone" loading="lazy" style="object-position: 30% 40%"/>
         <figcaption><strong>On the mic</strong>Speaking to an audience</figcaption>
       </figure>
     </div>
@@ -1546,9 +1546,9 @@ footer {
   <div class="projects-inner">
     <div class="section-header reveal">
       <h2 class="projects-heading">Projects</h2>
-      <span class="section-count">5 Works</span>
+      <span class="section-count" id="projectsCount">5 Works</span>
     </div>
-    <div class="projects-grid">
+    <div class="projects-grid" id="projectsGrid">
 
       <div class="project-card tilt-3d reveal delay-1" data-tilt-max="9">
         <div class="tilt-glare"></div>
@@ -1725,7 +1725,7 @@ footer {
 <section id="skills">
   <div class="skills-inner">
     <h2 class="skills-heading reveal">Skills</h2>
-    <div class="skills-grid">
+    <div class="skills-grid" id="skillsGrid">
       <div class="skill-item tilt-3d reveal delay-1" data-tilt-max="14">
         <div class="tilt-glare"></div>
         <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python"/>
@@ -1811,7 +1811,7 @@ footer {
     <div class="contact-img-wrap reveal-right">
       <div class="contact-portrait-card tilt-3d" data-tilt-max="10">
         <div class="tilt-glare"></div>
-        <img src="images/nimu_3.png" alt="Nimuthu"/>
+        <img src="images/nimu_3.png" data-cms-image="contactPortrait" alt="Nimuthu"/>
       </div>
       <p class="contact-footer-note">Open to opportunities · Sri Lanka · 2025–2026</p>
     </div>
@@ -1900,8 +1900,11 @@ onScrollUpdate();
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const supportsHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-if (!prefersReducedMotion && supportsHover) {
-  document.querySelectorAll('.tilt-3d').forEach(card => {
+function bindTilt3D(root = document) {
+  if (prefersReducedMotion || !supportsHover) return;
+  root.querySelectorAll('.tilt-3d').forEach(card => {
+    if (card.dataset.tiltBound === '1') return;
+    card.dataset.tiltBound = '1';
     const maxTilt = parseFloat(card.dataset.tiltMax) || 10;
 
     card.addEventListener('pointerenter', () => {
@@ -1935,6 +1938,102 @@ if (!prefersReducedMotion && supportsHover) {
     });
   });
 }
+bindTilt3D();
+
+// ── Dynamic Portfolio Data Hydration (from portfolio-data.json) ──
+function escapeHtml(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function applyPortfolioData(data) {
+  if (!data) return;
+
+  // 1. Update section & portrait images
+  if (data.images && typeof data.images === 'object') {
+    Object.entries(data.images).forEach(([key, src]) => {
+      if (!src) return;
+      document.querySelectorAll(`[data-cms-image="${key}"]`).forEach(img => {
+        img.src = src;
+      });
+    });
+  }
+
+  // 2. Render Projects
+  if (Array.isArray(data.projects) && data.projects.length > 0) {
+    const grid = document.getElementById('projectsGrid');
+    const countEl = document.getElementById('projectsCount');
+    if (countEl) {
+      countEl.textContent = `${data.projects.length} ${data.projects.length === 1 ? 'Work' : 'Works'}`;
+    }
+    if (grid) {
+      const ghIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>`;
+      const demoIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>`;
+
+      grid.innerHTML = data.projects.map((p, idx) => {
+        const delayCls = `delay-${(idx % 3) + 1}`;
+        const badgeCls = p.statusType === 'in-progress' ? 'project-badge in-progress' : 'project-badge';
+        const techHtml = (p.techStack || []).map(t => `<span class="tech-chip">${escapeHtml(t)}</span>`).join('');
+        const links = [];
+        if (p.githubUrl) {
+          links.push(`<a class="proj-link" href="${escapeHtml(p.githubUrl)}" target="_blank" rel="noopener">${ghIcon}GitHub</a>`);
+        }
+        if (p.demoUrl) {
+          links.push(`<a class="proj-link" href="${escapeHtml(p.demoUrl)}" target="_blank" rel="noopener">${demoIcon}${escapeHtml(p.demoLabel || 'Live Demo')}</a>`);
+        }
+        return `
+          <div class="project-card tilt-3d reveal visible ${delayCls}" data-tilt-max="9">
+            <div class="tilt-glare"></div>
+            <div class="project-img">
+              <img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.title)}"/>
+              <span class="${badgeCls}">${escapeHtml(p.status || 'Completed')}</span>
+            </div>
+            <div class="project-body">
+              <div class="project-index">${escapeHtml(p.indexLabel || `Project ${String(idx + 1).padStart(2, '0')}`)}</div>
+              <h3 class="project-title">${escapeHtml(p.title)}</h3>
+              <p class="project-desc">${escapeHtml(p.description)}</p>
+              <div class="tech-stack">${techHtml}</div>
+              ${links.length ? `<div class="project-links">${links.join('')}</div>` : ''}
+            </div>
+          </div>`;
+      }).join('');
+      bindTilt3D(grid);
+    }
+  }
+
+  // 3. Render Skills / Tech Stack
+  if (Array.isArray(data.skills) && data.skills.length > 0) {
+    const skillsGrid = document.getElementById('skillsGrid');
+    if (skillsGrid) {
+      skillsGrid.innerHTML = data.skills.map((s, idx) => {
+        const delayCls = `delay-${(idx % 3) + 1}`;
+        return `
+          <div class="skill-item tilt-3d reveal visible ${delayCls}" data-tilt-max="14">
+            <div class="tilt-glare"></div>
+            <img src="${escapeHtml(s.icon)}" alt="${escapeHtml(s.name)}"/>
+            <span class="skill-name">${escapeHtml(s.name)}</span>
+          </div>`;
+      }).join('');
+      bindTilt3D(skillsGrid);
+    }
+  }
+}
+
+(async function loadPortfolioCMS() {
+  try {
+    const res = await fetch('portfolio-data.json?t=' + Date.now(), { cache: 'no-store' });
+    if (res.ok) {
+      const json = await res.json();
+      applyPortfolioData(json);
+    }
+  } catch (_) {
+    // Fallback to static HTML if offline or opened via file://
+  }
+})();
 
 // ── Hero 3D Wireframe Polyhedra Canvas ──
 (function initHero3DCanvas() {

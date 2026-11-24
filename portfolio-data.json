@@ -1,0 +1,120 @@
+{
+  "repo": "nimuthuSW/new_portfolio",
+  "branch": "main",
+  "images": {
+    "heroPortrait": "images/nimu_1.png",
+    "aboutImg1": "images/badminton.jpg",
+    "aboutImg2": "images/scrabble.jpg",
+    "aboutImg3": "images/nimu_2.png",
+    "contactPortrait": "images/nimu_3.png",
+    "moment1": "images/moment_portrait.jpg",
+    "moment2": "images/moment_scrabble_lanka_1.webp",
+    "moment3": "images/moment_scrabble_lanka_2.webp",
+    "moment4": "images/moment_speaking.jpg"
+  },
+  "projects": [
+    {
+      "id": "proj-1",
+      "indexLabel": "Project 01 — Featured",
+      "title": "Librioo",
+      "status": "In Progress",
+      "statusType": "in-progress",
+      "image": "images/project_librioo.png",
+      "description": "A smart library assistant robot combining embedded systems, web technologies, and backend services to help users navigate and improve the library experience.",
+      "techStack": ["Spring Boot", "React", "MySQL", "Arduino / ESP32"],
+      "githubUrl": "https://github.com/projectlibrioo-source/librioo-system",
+      "demoUrl": "https://youtu.be/OEIA4YoU0E8",
+      "demoLabel": "Live Demo"
+    },
+    {
+      "id": "proj-2",
+      "indexLabel": "Project 02",
+      "title": "Zero Hunger Website",
+      "status": "Completed",
+      "statusType": "completed",
+      "image": "images/project_feedthefuture.png",
+      "description": "A website based on the UN SDG Zero Hunger goal, raising awareness and providing information and support options related to ending hunger.",
+      "techStack": ["HTML", "CSS", "JavaScript"],
+      "githubUrl": "https://github.com/nimuthuSW/Feed-The-Future",
+      "demoUrl": "https://github.com/nimuthuSW/Feed-The-Future",
+      "demoLabel": "Overview"
+    },
+    {
+      "id": "proj-3",
+      "indexLabel": "Project 03",
+      "title": "ODECS Website",
+      "status": "Completed",
+      "statusType": "completed",
+      "image": "images/project_odecs.png",
+      "description": "A professional company website for ODECS showcasing services, projects, and contact info through a clean and responsive modern web interface.",
+      "techStack": ["React", "CSS", "JavaScript"],
+      "githubUrl": "https://github.com/nimuthuSW/odecs-website",
+      "demoUrl": "https://github.com/nimuthuSW/odecs-website",
+      "demoLabel": "Overview"
+    },
+    {
+      "id": "proj-4",
+      "indexLabel": "Project 04",
+      "title": "RovioTek Website",
+      "status": "Completed",
+      "statusType": "completed",
+      "image": "images/project_roviotek.png",
+      "description": "A modern business website created for RovioTek presenting team, services, and digital solutions in a visually engaging and responsive format.",
+      "techStack": ["React", "CSS", "JavaScript"],
+      "githubUrl": "https://github.com/nimuthuSW",
+      "demoUrl": "",
+      "demoLabel": ""
+    },
+    {
+      "id": "proj-5",
+      "indexLabel": "Project 05",
+      "title": "Scrabble Showdown",
+      "status": "Completed",
+      "statusType": "completed",
+      "image": "images/project_showdown.png",
+      "description": "A website developed for Richmond Scrabble Showdown for live results and pairings management during the competition.",
+      "techStack": ["HTML", "CSS", "JavaScript"],
+      "githubUrl": "https://github.com/nimuthuSW/Richmond_Showdown",
+      "demoUrl": "https://github.com/nimuthuSW/Richmond_Showdown",
+      "demoLabel": "Overview"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Python",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"
+    },
+    {
+      "name": "Spring Boot",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg"
+    },
+    {
+      "name": "React JS",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
+    },
+    {
+      "name": "MySQL",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg"
+    },
+    {
+      "name": "JavaScript",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg"
+    },
+    {
+      "name": "Arduino",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/arduino/arduino-original.svg"
+    },
+    {
+      "name": "Figma",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg"
+    },
+    {
+      "name": "Photoshop",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg"
+    },
+    {
+      "name": "Git",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg"
+    }
+  ]
+}

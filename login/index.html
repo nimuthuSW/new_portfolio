@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Portfolio Studio · Admin Login</title>
+<meta name="robots" content="noindex, nofollow"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-dark:    #1a1a1a;
+  --bg-card:    #232323;
+  --bg-input:   #181818;
+  --accent:     #5a8a5a;
+  --accent-lt:  #7fb883;
+  --accent-dim: rgba(90, 138, 90, 0.16);
+  --text-light: #ececec;
+  --text-pale:  #a8a8a8;
+  --border:     rgba(127, 184, 131, 0.22);
+  --danger:     #e57373;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Lora', serif;
+  background: radial-gradient(circle at 20% 0%, #253026 0%, var(--bg-dark) 55%);
+  color: var(--text-light);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── TOP BAR ── */
+.topbar {
+  height: 64px;
+  padding: 0 5vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(20, 20, 20, 0.92);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  text-decoration: none;
+  color: var(--text-light);
+}
+.brand-mark {
+  width: 34px; height: 34px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.brand-text {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+}
+.brand-text span {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--accent-lt);
+  margin-left: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* ── BUTTONS ── */
+.btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-light);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+.btn:hover {
+  border-color: var(--accent-lt);
+  background: var(--accent-dim);
+}
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent-lt);
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(90, 138, 90, 0.3);
+}
+.btn-primary:hover {
+  background: var(--accent-lt);
+  color: #131c14;
+}
+.btn-danger {
+  border-color: rgba(229, 115, 115, 0.35);
+  color: var(--danger);
+}
+.btn-danger:hover {
+  background: rgba(229, 115, 115, 0.14);
+  border-color: var(--danger);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── LOGIN SCREEN ── */
+.auth-wrap {
+  min-height: calc(100vh - 64px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 5vw;
+}
+.auth-card {
+  width: 100%;
+  max-width: 480px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2.4rem 2.2rem;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+.auth-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-lt);
+  margin-bottom: 0.6rem;
+}
+.auth-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.9rem;
+  font-weight: 800;
+  margin-bottom: 0.7rem;
+}
+.auth-desc {
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--text-pale);
+  margin-bottom: 1.6rem;
+}
+.field {
+  margin-bottom: 1.2rem;
+}
+.field label {
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-lt);
+  margin-bottom: 0.45rem;
+}
+.field input, .field textarea, .field select {
+  width: 100%;
+  padding: 11px 13px;
+  background: var(--bg-input);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  color: var(--text-light);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.8rem;
+  transition: border-color 0.2s;
+}
+.field textarea {
+  font-family: 'Lora', serif;
+  font-size: 0.92rem;
+  min-height: 84px;
+  resize: vertical;
+}
+.field input:focus, .field textarea:focus, .field select:focus {
+  outline: none;
+  border-color: var(--accent-lt);
+}
+.auth-help {
+  margin-top: 1.2rem;
+  padding: 0.9rem 1rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  line-height: 1.6;
+  color: var(--text-pale);
+}
+.auth-help a { color: var(--accent-lt); }
+
+/* ── DASHBOARD ── */
+.dashboard {
+  display: none;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 2.2rem 5vw 5rem;
+}
+.dashboard.active {
+  display: block;
+}
+
+.dash-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.4rem;
+  border-bottom: 1px solid var(--border);
+}
+.dash-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(1.6rem, 3vw, 2.3rem);
+  font-weight: 800;
+}
+.dash-subtitle {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text-pale);
+  margin-top: 0.25rem;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+.tab-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-pale);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.tab-btn.active, .tab-btn:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent-lt);
+}
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── CARDS & GRIDS ── */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  gap: 1.4rem;
+}
+.editor-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+.editor-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+.editor-card-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent-lt);
+}
+.img-preview-box {
+  width: 100%;
+  height: 180px;
+  background: #141414;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.img-preview-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.img-preview-box.icon-preview {
+  height: 96px;
+}
+.img-preview-box.icon-preview img {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+}
+
+.upload-row {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+.file-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 9px 13px;
+  border-radius: 8px;
+  background: var(--accent-dim);
+  border: 1px dashed var(--accent-lt);
+  color: var(--accent-lt);
+  cursor: pointer;
+  white-space: nowrap;
+  text-align: center;
+  flex-shrink: 0;
+}
+.file-label:hover {
+  background: var(--accent);
+  color: #fff;
+}
+.file-label input {
+  display: none;
+}
+
+/* ── STATUS TOAST ── */
+.status-banner {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 500;
+  padding: 14px 20px;
+  border-radius: 12px;
+  background: #1e291f;
+  border: 1px solid var(--accent-lt);
+  color: #fff;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.76rem;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+  transform: translateY(120%);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  max-width: 420px;
+}
+.status-banner.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+.status-banner.error {
+  background: #2d1c1c;
+  border-color: var(--danger);
+}
+
+.section-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.4rem;
+}
+.section-toolbar h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.35rem;
+}
+
+@media (max-width: 640px) {
+  .topbar { padding: 0 4vw; }
+  .brand-text span { display: none; }
+  .auth-card { padding: 1.8rem 1.4rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="../">
+    <span class="brand-mark">NW</span>
+    <span class="brand-text">Nimuthu.<span>Studio Admin</span></span>
+  </a>
+  <div class="topbar-actions">
+    <a class="btn" href="../">← View Portfolio</a>
+    <button class="btn btn-danger" id="logoutBtn" type="button" style="display:none;">Sign Out</button>
+  </div>
+</header>
+
+<!-- ── LOGIN VIEW ── -->
+<main class="auth-wrap" id="authView">
+  <form class="auth-card" id="loginForm">
+    <div class="auth-eyebrow">Protected Route · /login</div>
+    <h1 class="auth-title">Portfolio Studio</h1>
+    <p class="auth-desc">
+      Sign in with your GitHub Personal Access Token to upload new images, add or edit projects, and manage your tech stack directly on <strong>nimuthu.rakkora.org</strong>.
+    </p>
+    <div class="field">
+      <label for="ghRepo">GitHub Repository</label>
+      <input id="ghRepo" type="text" value="nimuthuSW/new_portfolio" required/>
+    </div>
+    <div class="field">
+      <label for="ghBranch">Branch</label>
+      <input id="ghBranch" type="text" value="main" required/>
+    </div>
+    <div class="field">
+      <label for="ghToken">GitHub Personal Access Token (PAT)</label>
+      <input id="ghToken" type="password" placeholder="ghp_... or github_pat_..." autocomplete="current-password" required/>
+    </div>
+    <button class="btn btn-primary" id="loginSubmitBtn" type="submit" style="width:100%; padding:13px;">
+      Authenticate &amp; Open Studio
+    </button>
+    <div class="auth-help">
+      Need a token? Create a <a href="https://github.com/settings/tokens" target="_blank" rel="noopener">GitHub Token</a> with <strong>Contents: Read &amp; write</strong> permission for <code>nimuthuSW/new_portfolio</code>. Your token stays in your browser only and is never committed.
+    </div>
+  </form>
+</main>
+
+<!-- ── ADMIN DASHBOARD VIEW ── -->
+<section class="dashboard" id="dashboardView">
+  <div class="dash-header">
+    <div>
+      <h1 class="dash-title">Manage Portfolio Content</h1>
+      <p class="dash-subtitle" id="connectedUserText">Connected to nimuthuSW/new_portfolio</p>
+    </div>
+    <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+      <button class="btn btn-primary" id="publishBtn" type="button">
+        Publish Changes to Live Site
+      </button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" type="button" data-tab="projectsTab">Projects</button>
+    <button class="tab-btn" type="button" data-tab="skillsTab">Tech Stack / Skills</button>
+    <button class="tab-btn" type="button" data-tab="imagesTab">Section Images</button>
+  </div>
+
+  <!-- 1. PROJECTS TAB -->
+  <div class="tab-panel active" id="projectsTab">
+    <div class="section-toolbar">
+      <h2>Projects (<span id="adminProjCount">0</span>)</h2>
+      <button class="btn btn-primary" id="addProjectBtn" type="button">+ Add New Project</button>
+    </div>
+    <div class="cards-grid" id="projectsEditorGrid"></div>
+  </div>
+
+  <!-- 2. SKILLS / TECH STACK TAB -->
+  <div class="tab-panel" id="skillsTab">
+    <div class="section-toolbar">
+      <h2>Tech Stack &amp; Skills (<span id="adminSkillCount">0</span>)</h2>
+      <button class="btn btn-primary" id="addSkillBtn" type="button">+ Add Tech Skill</button>
+    </div>
+    <div class="cards-grid" id="skillsEditorGrid"></div>
+  </div>
+
+  <!-- 3. SECTION IMAGES TAB -->
+  <div class="tab-panel" id="imagesTab">
+    <div class="section-toolbar">
+      <h2>Portraits &amp; Section Photos</h2>
+    </div>
+    <div class="cards-grid" id="imagesEditorGrid"></div>
+  </div>
+</section>
+
+<div class="status-banner" id="statusBanner" role="status"></div>
+
+<script>
+const STORAGE_KEY = 'nw_portfolio_cms_auth';
+let authState = null; // { token, repo, branch, user }
+let cmsData = null;
+
+const IMAGE_SLOTS = [
+  { key: 'heroPortrait', label: 'Hero Portrait (Top Section)' },
+  { key: 'aboutImg1', label: 'About Photo 1 (Badminton)' },
+  { key: 'aboutImg2', label: 'About Photo 2 (Scrabble)' },
+  { key: 'aboutImg3', label: 'About Photo 3 (Portrait)' },
+  { key: 'moment1', label: 'Moments Gallery #1 (Portrait)' },
+  { key: 'moment2', label: 'Moments Gallery #2 (Championship 1)' },
+  { key: 'moment3', label: 'Moments Gallery #3 (Championship 2)' },
+  { key: 'moment4', label: 'Moments Gallery #4 (Speaking)' },
+  { key: 'contactPortrait', label: 'Contact Section Portrait' }
+];
+
+function showToast(msg, isError = false) {
+  const banner = document.getElementById('statusBanner');
+  banner.textContent = msg;
+  banner.classList.toggle('error', isError);
+  banner.classList.add('show');
+  clearTimeout(showToast._timer);
+  showToast._timer = setTimeout(() => banner.classList.remove('show'), 4500);
+}
+
+function resolveImgPreview(src) {
+  if (!src) return '';
+  if (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('data:') || src.startsWith('/')) {
+    return src;
+  }
+  return '../' + src.replace(/^\.?\//, '');
+}
+
+// ── GitHub API Helpers ──
+async function ghRequest(path, options = {}) {
+  const res = await fetch(`https://api.github.com${path}`, {
+    ...options,
+    headers: {
+      'Accept': 'application/vnd.github+json',
+      'Authorization': `Bearer ${authState.token}`,
+      ...(options.headers || {})
+    }
+  });
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`GitHub API (${res.status}): ${errText}`);
+  }
+  return res.json();
+}
+
+function arrayBufferToBase64(buffer) {
+  let binary = '';
+  const bytes = new Uint8Array(buffer);
+  const chunkSize = 0x8000;
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
+  }
+  return btoa(binary);
+}
+
+function utf8ToBase64(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
+
+async function uploadImageToRepo(file) {
+  const safeName = Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+  const repoPath = `images/${safeName}`;
+  showToast(`Uploading ${file.name} to GitHub...`);
+
+  const buf = await file.arrayBuffer();
+  const base64Content = arrayBufferToBase64(buf);
+
+  let existingSha = undefined;
+  try {
+    const existing = await ghRequest(`/repos/${authState.repo}/contents/${repoPath}?ref=${authState.branch}`);
+    existingSha = existing.sha;
+  } catch (_) {}
+
+  await ghRequest(`/repos/${authState.repo}/contents/${repoPath}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      message: `Upload image ${safeName} via Portfolio Studio`,
+      content: base64Content,
+      branch: authState.branch,
+      ...(existingSha ? { sha: existingSha } : {})
+    })
+  });
+
+  showToast(`Uploaded ${repoPath}! Remember to click "Publish Changes".`);
+  return repoPath;
+}
+
+// ── Load portfolio-data.json ──
+async function loadCurrentPortfolioData() {
+  try {
+    const fileInfo = await ghRequest(`/repos/${authState.repo}/contents/portfolio-data.json?ref=${authState.branch}`);
+    const decoded = decodeURIComponent(escape(atob(fileInfo.content.replace(/\s/g, ''))));
+    cmsData = JSON.parse(decoded);
+    return;
+  } catch (_) {
+    // Fallback to local fetch
+    const res = await fetch('../portfolio-data.json?t=' + Date.now(), { cache: 'no-store' });
+    cmsData = await res.json();
+  }
+}
+
+// ── Render Editors ──
+function renderProjectsEditor() {
+  const grid = document.getElementById('projectsEditorGrid');
+  const count = document.getElementById('adminProjCount');
+  count.textContent = cmsData.projects.length;
+
+  grid.innerHTML = cmsData.projects.map((p, idx) => `
+    <div class="editor-card" data-proj-idx="${idx}">
+      <div class="editor-card-header">
+        <span class="editor-card-title">#${idx + 1} · ${p.title || 'Untitled'}</span>
+        <button class="btn btn-danger" type="button" onclick="removeProject(${idx})">Delete</button>
+      </div>
+      <div class="img-preview-box">
+        <img src="${resolveImgPreview(p.image)}" alt="${p.title || ''}" id="projPreview_${idx}"/>
+      </div>
+      <div class="upload-row">
+        <label class="file-label">
+          Upload Image
+          <input type="file" accept="image/*" onchange="onProjectImageFile(${idx}, this)"/>
+        </label>
+        <input type="text" value="${p.image || ''}" placeholder="images/project.png or https://..."
+          oninput="updateProjectField(${idx}, 'image', this.value)"
+          style="flex:1; padding:9px 11px; background:var(--bg-input); border:1px solid rgba(255,255,255,0.12); border-radius:8px; color:var(--text-light); font-family:'DM Mono',monospace; font-size:0.75rem;"/>
+      </div>
+      <div class="field" style="margin:0;">
+        <label>Index Label</label>
+        <input type="text" value="${p.indexLabel || ''}" oninput="updateProjectField(${idx}, 'indexLabel', this.value)"/>
+      </div>
+      <div class="field" style="margin:0;">
+        <label>Project Title</label>
+        <input type="text" value="${p.title || ''}" oninput="updateProjectField(${idx}, 'title', this.value)"/>
+      </div>
+      <div class="field" style="margin:0;">
+        <label>Status Badge</label>
+        <select onchange="updateProjectStatus(${idx}, this.value)">
+          <option value="completed" ${p.statusType !== 'in-progress' ? 'selected' : ''}>Completed (Green)</option>
+          <option value="in-progress" ${p.statusType === 'in-progress' ? 'selected' : ''}>In Progress (Amber)</option>
+        </select>
+      </div>
+      <div class="field" style="margin:0;">
+        <label>Description</label>
+        <textarea oninput="updateProjectField(${idx}, 'description', this.value)">${p.description || ''}</textarea>
+      </div>
+      <div class="field" style="margin:0;">
+        <label>Tech Stack (comma-separated)</label>
+        <input type="text" value="${(p.techStack || []).join(', ')}" oninput="updateProjectTech(${idx}, this.value)"/>
+      </div>
+      <div class="field" style="margin:0;">
+        <label>GitHub URL</label>
+        <input type="url" value="${p.githubUrl || ''}" placeholder="https://github.com/..." oninput="updateProjectField(${idx}, 'githubUrl', this.value)"/>
+      </div>
+      <div class="field" style="margin:0;">
+        <label>Live Demo / Overview URL (optional)</label>
+        <input type="url" value="${p.demoUrl || ''}" placeholder="https://..." oninput="updateProjectField(${idx}, 'demoUrl', this.value)"/>
+      </div>
+    </div>
+  `).join('');
+}
+
+window.updateProjectField = function(idx, field, val) {
+  cmsData.projects[idx][field] = val;
+  if (field === 'image') {
+    const img = document.getElementById(`projPreview_${idx}`);
+    if (img) img.src = resolveImgPreview(val);
+  }
+};
+
+window.updateProjectStatus = function(idx, type) {
+  cmsData.projects[idx].statusType = type;
+  cmsData.projects[idx].status = type === 'in-progress' ? 'In Progress' : 'Completed';
+};
+
+window.updateProjectTech = function(idx, val) {
+  cmsData.projects[idx].techStack = val.split(',').map(s => s.trim()).filter(Boolean);
+};
+
+window.onProjectImageFile = async function(idx, input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  try {
+    const path = await uploadImageToRepo(file);
+    cmsData.projects[idx].image = path;
+    renderProjectsEditor();
+  } catch (err) {
+    showToast(err.message, true);
+  }
+};
+
+window.removeProject = function(idx) {
+  cmsData.projects.splice(idx, 1);
+  renderProjectsEditor();
+};
+
+document.getElementById('addProjectBtn').addEventListener('click', () => {
+  const nextNum = String(cmsData.projects.length + 1).padStart(2, '0');
+  cmsData.projects.unshift({
+    id: 'proj-' + Date.now(),
+    indexLabel: `Project ${nextNum}`,
+    title: 'New Project',
+    status: 'Completed',
+    statusType: 'completed',
+    image: 'images/project_librioo.png',
+    description: 'Describe what this project does and the impact it creates.',
+    techStack: ['React', 'JavaScript', 'CSS'],
+    githubUrl: 'https://github.com/nimuthuSW',
+    demoUrl: '',
+    demoLabel: 'Live Demo'
+  });
+  renderProjectsEditor();
+  showToast('Added new project card at the top.');
+});
+
+// ── Skills Editor ──
+function renderSkillsEditor() {
+  const grid = document.getElementById('skillsEditorGrid');
+  const count = document.getElementById('adminSkillCount');
+  count.textContent = cmsData.skills.length;
+
+  grid.innerHTML = cmsData.skills.map((s, idx) => `
+    <div class="editor-card">
+      <div class="editor-card-header">
+        <span class="editor-card-title">${s.name || 'Skill'}</span>
+        <button class="btn btn-danger" type="button" onclick="removeSkill(${idx})">Delete</button>
+      </div>
+      <div class="img-preview-box icon-preview">
+        <img src="${resolveImgPreview(s.icon)}" alt="${s.name || ''}" id="skillPreview_${idx}"/>
+      </div>
+      <div class="field" style="margin:0;">
+        <label>Tech / Skill Name</label>
+        <input type="text" value="${s.name || ''}" oninput="updateSkillField(${idx}, 'name', this.value)"/>
+      </div>
+      <div class="field" style="margin:0;">
+        <label>Icon URL or Repo Image Path</label>
+        <div class="upload-row">
+          <label class="file-label">
+            Upload Icon
+            <input type="file" accept="image/*" onchange="onSkillIconFile(${idx}, this)"/>
+          </label>
+          <input type="text" value="${s.icon || ''}" placeholder="https://cdn.jsdelivr.net/gh/devicons/..."
+            oninput="updateSkillField(${idx}, 'icon', this.value)"/>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+window.updateSkillField = function(idx, field, val) {
+  cmsData.skills[idx][field] = val;
+  if (field === 'icon') {
+    const img = document.getElementById(`skillPreview_${idx}`);
+    if (img) img.src = resolveImgPreview(val);
+  }
+};
+
+window.onSkillIconFile = async function(idx, input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  try {
+    const path = await uploadImageToRepo(file);
+    cmsData.skills[idx].icon = path;
+    renderSkillsEditor();
+  } catch (err) {
+    showToast(err.message, true);
+  }
+};
+
+window.removeSkill = function(idx) {
+  cmsData.skills.splice(idx, 1);
+  renderSkillsEditor();
+};
+
+document.getElementById('addSkillBtn').addEventListener('click', () => {
+  cmsData.skills.push({
+    name: 'TypeScript',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg'
+  });
+  renderSkillsEditor();
+  showToast('Added new tech stack skill.');
+});
+
+// ── Section Images Editor ──
+function renderImagesEditor() {
+  const grid = document.getElementById('imagesEditorGrid');
+  if (!cmsData.images) cmsData.images = {};
+
+  grid.innerHTML = IMAGE_SLOTS.map(slot => {
+    const currentSrc = cmsData.images[slot.key] || '';
+    return `
+      <div class="editor-card">
+        <div class="editor-card-header">
+          <span class="editor-card-title">${slot.label}</span>
+        </div>
+        <div class="img-preview-box">
+          <img src="${resolveImgPreview(currentSrc)}" alt="${slot.label}" id="slotPreview_${slot.key}"/>
+        </div>
+        <div class="upload-row">
+          <label class="file-label">
+            Upload New Photo
+            <input type="file" accept="image/*" onchange="onSlotImageFile('${slot.key}', this)"/>
+          </label>
+          <input type="text" value="${currentSrc}"
+            oninput="updateSlotImage('${slot.key}', this.value)"
+            style="flex:1; padding:9px 11px; background:var(--bg-input); border:1px solid rgba(255,255,255,0.12); border-radius:8px; color:var(--text-light); font-family:'DM Mono',monospace; font-size:0.75rem;"/>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+window.updateSlotImage = function(key, val) {
+  cmsData.images[key] = val;
+  const img = document.getElementById(`slotPreview_${key}`);
+  if (img) img.src = resolveImgPreview(val);
+};
+
+window.onSlotImageFile = async function(key, input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  try {
+    const path = await uploadImageToRepo(file);
+    cmsData.images[key] = path;
+    renderImagesEditor();
+  } catch (err) {
+    showToast(err.message, true);
+  }
+};
+
+function renderAllEditors() {
+  renderProjectsEditor();
+  renderSkillsEditor();
+  renderImagesEditor();
+}
+
+// ── Tabs Switching ──
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ── Publish Changes to GitHub ──
+document.getElementById('publishBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('publishBtn');
+  btn.disabled = true;
+  btn.textContent = 'Publishing to GitHub...';
+  try {
+    let sha = undefined;
+    try {
+      const existing = await ghRequest(`/repos/${authState.repo}/contents/portfolio-data.json?ref=${authState.branch}`);
+      sha = existing.sha;
+    } catch (_) {}
+
+    const jsonString = JSON.stringify(cmsData, null, 2) + '\n';
+    await ghRequest(`/repos/${authState.repo}/contents/portfolio-data.json`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        message: 'Update portfolio content via /login Studio',
+        content: utf8ToBase64(jsonString),
+        branch: authState.branch,
+        ...(sha ? { sha } : {})
+      })
+    });
+    showToast('Published! GitHub Pages will update nimuthu.rakkora.org shortly.');
+  } catch (err) {
+    showToast(err.message, true);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Publish Changes to Live Site';
+  }
+});
+
+// ── Login & Session Management ──
+async function activateDashboard(creds) {
+  authState = creds;
+  const user = await ghRequest('/user');
+  document.getElementById('connectedUserText').textContent =
+    `Authenticated as @${user.login} · Repo: ${authState.repo} (${authState.branch})`;
+  await loadCurrentPortfolioData();
+  renderAllEditors();
+
+  document.getElementById('authView').style.display = 'none';
+  document.getElementById('dashboardView').classList.add('active');
+  document.getElementById('logoutBtn').style.display = 'inline-flex';
+}
+
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const submitBtn = document.getElementById('loginSubmitBtn');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Verifying with GitHub...';
+
+  const creds = {
+    repo: document.getElementById('ghRepo').value.trim(),
+    branch: document.getElementById('ghBranch').value.trim() || 'main',
+    token: document.getElementById('ghToken').value.trim()
+  };
+
+  try {
+    await activateDashboard(creds);
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(creds));
+    showToast('Welcome to Portfolio Studio!');
+  } catch (err) {
+    showToast('Authentication failed: check your GitHub token & permissions.', true);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Authenticate & Open Studio';
+  }
+});
+
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  sessionStorage.removeItem(STORAGE_KEY);
+  authState = null;
+  document.getElementById('dashboardView').classList.remove('active');
+  document.getElementById('authView').style.display = 'flex';
+  document.getElementById('logoutBtn').style.display = 'none';
+  document.getElementById('ghToken').value = '';
+});
+
+// Auto-restore session if token is in sessionStorage
+(async function restoreSession() {
+  const saved = sessionStorage.getItem(STORAGE_KEY);
+  if (!saved) return;
+  try {
+    const creds = JSON.parse(saved);
+    await activateDashboard(creds);
+  } catch (_) {
+    sessionStorage.removeItem(STORAGE_KEY);
+  }
+})();
+</script>
+</body>
+</html>
