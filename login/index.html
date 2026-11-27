@@ -312,7 +312,7 @@ body {
 .img-preview-box img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 .img-preview-box.icon-preview {
   height: 96px;
@@ -632,7 +632,8 @@ function renderProjectsEditor() {
       <div class="field" style="margin:0;">
         <label>Status Badge</label>
         <select onchange="updateProjectStatus(${idx}, this.value)">
-          <option value="completed" ${p.statusType !== 'in-progress' ? 'selected' : ''}>Completed (Green)</option>
+          <option value="live" ${p.statusType === 'live' ? 'selected' : ''}>Live (Green)</option>
+          <option value="completed" ${p.statusType !== 'in-progress' && p.statusType !== 'live' ? 'selected' : ''}>Completed (Sage)</option>
           <option value="in-progress" ${p.statusType === 'in-progress' ? 'selected' : ''}>In Progress (Amber)</option>
         </select>
       </div>
@@ -649,7 +650,7 @@ function renderProjectsEditor() {
         <input type="url" value="${p.githubUrl || ''}" placeholder="https://github.com/..." oninput="updateProjectField(${idx}, 'githubUrl', this.value)"/>
       </div>
       <div class="field" style="margin:0;">
-        <label>Live Demo / Overview URL (optional)</label>
+        <label>Live Demo / Visit Site URL (optional)</label>
         <input type="url" value="${p.demoUrl || ''}" placeholder="https://..." oninput="updateProjectField(${idx}, 'demoUrl', this.value)"/>
       </div>
     </div>
@@ -666,7 +667,7 @@ window.updateProjectField = function(idx, field, val) {
 
 window.updateProjectStatus = function(idx, type) {
   cmsData.projects[idx].statusType = type;
-  cmsData.projects[idx].status = type === 'in-progress' ? 'In Progress' : 'Completed';
+  cmsData.projects[idx].status = type === 'in-progress' ? 'In Progress' : (type === 'live' ? 'Live' : 'Completed');
 };
 
 window.updateProjectTech = function(idx, val) {

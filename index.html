@@ -560,28 +560,30 @@ nav.scrolled {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.4rem;
+  align-items: start;
   perspective: 1100px;
 }
 .about-card-3d {
   position: relative;
   overflow: hidden;
   border: 1px solid var(--border-dark);
-  background: #1f1f1f;
+  background: #181818;
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
 }
 .about-card-3d:first-child {
   grid-column: span 2;
 }
 .about-card-3d img {
-  width: 100%; height: 250px;
-  object-fit: cover;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
   display: block;
   filter: grayscale(18%);
   transition: filter 0.45s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .about-card-3d:hover img {
   filter: grayscale(0%);
-  transform: scale(1.05);
+  transform: scale(1.03);
 }
 .about-card-caption {
   position: absolute;
@@ -620,28 +622,30 @@ nav.scrolled {
 .moments-heading em { font-style: italic; color: var(--accent); }
 .moments-grid {
   display: grid;
-  grid-template-columns: 0.85fr 1fr 1fr;
-  grid-template-rows: 300px 300px;
+  grid-template-columns: 0.72fr 1fr 1fr;
   gap: 1.3rem;
+  align-items: start;
   perspective: 1200px;
 }
 .moment {
   position: relative; overflow: hidden; margin: 0;
-  background: var(--bg-dark); cursor: zoom-in;
+  background: #181818; cursor: zoom-in;
   box-shadow: 0 16px 36px rgba(30, 50, 30, 0.14);
   border: 1px solid rgba(90, 138, 90, 0.22);
 }
 .moment:first-child { grid-row: span 2; }
 .moment:last-child { grid-column: span 2; }
 .moment img {
-  width: 100%; height: 100%; display: block;
-  object-fit: cover;
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
   filter: grayscale(15%);
   transition: filter 0.4s, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .moment:hover img, .moment:focus-visible img {
   filter: grayscale(0%);
-  transform: scale(1.06);
+  transform: scale(1.03);
 }
 .moment figcaption {
   position: absolute; left: 0; right: 0; bottom: 0;
@@ -773,6 +777,7 @@ nav.scrolled {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 350px), 1fr));
   gap: 1.5rem;
+  align-items: stretch;
   perspective: 1300px;
 }
 
@@ -790,18 +795,27 @@ nav.scrolled {
 }
 
 .project-img {
-  width: 100%; height: 220px;
-  overflow: hidden; position: relative;
-  background: #111;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  background: #141414;
+  border-bottom: 1px solid rgba(127, 184, 131, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .project-img img {
-  width: 100%; height: 100%; object-fit: cover;
-  filter: brightness(0.8) grayscale(10%);
+  width: 100%;
+  height: auto;
+  max-height: 280px;
+  object-fit: contain;
+  display: block;
+  filter: brightness(0.9) grayscale(8%);
   transition: filter 0.5s, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .project-card:hover .project-img img {
-  filter: brightness(0.98) grayscale(0%);
-  transform: scale(1.07);
+  filter: brightness(1) grayscale(0%);
+  transform: scale(1.03);
 }
 
 .project-badge {
@@ -813,6 +827,10 @@ nav.scrolled {
   z-index: 5;
   transform: translateZ(26px);
   box-shadow: 0 8px 18px rgba(0,0,0,0.3);
+}
+.project-badge.live {
+  background: rgba(46, 125, 50, 0.95);
+  border: 1px solid rgba(185, 246, 202, 0.45);
 }
 .project-badge.in-progress { background: rgba(180,140,60,0.92); }
 
@@ -1177,7 +1195,6 @@ footer {
   .edu-item::after { left: 171px; }
   .moments-grid {
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 360px 280px 280px;
   }
   .moment:first-child { grid-row: span 1; }
   .moment:nth-child(3) { grid-column: span 2; }
@@ -1295,7 +1312,7 @@ footer {
     grid-column: auto;
   }
   .about-card-3d img {
-    height: 220px;
+    height: auto;
   }
 
   .projects-grid { grid-template-columns: 1fr; }
@@ -1345,8 +1362,6 @@ footer {
 @media (max-width: 600px) {
   .moments-grid {
     grid-template-columns: 1fr;
-    grid-template-rows: 340px;
-    grid-auto-rows: 250px;
   }
   .moment:first-child { grid-row: span 1; }
   .moment:nth-child(3), .moment:last-child { grid-column: auto; }
@@ -1416,7 +1431,7 @@ footer {
       </div>
       <div class="hero-stats">
         <div class="stat-card tilt-3d" data-tilt-max="10">
-          <span class="stat-num">5+</span>
+          <span class="stat-num" id="heroProjectsStat">8+</span>
           <span class="stat-label">Projects Built</span>
         </div>
         <div class="stat-card tilt-3d" data-tilt-max="10">
@@ -1500,7 +1515,7 @@ footer {
       </figure>
       <figure class="moment tilt-3d reveal delay-4" data-tilt-max="8" tabindex="0">
         <div class="tilt-glare"></div>
-        <img src="images/moment_speaking.jpg" data-cms-image="moment4" alt="Nimuthu speaking into a microphone" loading="lazy" style="object-position: 30% 40%"/>
+        <img src="images/moment_speaking.jpg" data-cms-image="moment4" alt="Nimuthu speaking into a microphone" loading="lazy"/>
         <figcaption><strong>On the mic</strong>Speaking to an audience</figcaption>
       </figure>
     </div>
@@ -1546,20 +1561,131 @@ footer {
   <div class="projects-inner">
     <div class="section-header reveal">
       <h2 class="projects-heading">Projects</h2>
-      <span class="section-count" id="projectsCount">5 Works</span>
+      <span class="section-count" id="projectsCount">8 Works</span>
     </div>
     <div class="projects-grid" id="projectsGrid">
 
       <div class="project-card tilt-3d reveal delay-1" data-tilt-max="9">
         <div class="tilt-glare"></div>
         <div class="project-img">
-          <img src="images/project_librioo.png" alt="Librioo"/>
+          <img src="images/project_aquatica.webp" alt="Aquatica website home page"/>
+          <span class="project-badge live">Live</span>
+        </div>
+        <div class="project-body">
+          <div class="project-index">01 — Featured</div>
+          <h3 class="project-title">Aquatica</h3>
+          <p class="project-desc">An interactive, animated underwater website about protecting water sources and the ocean — with filterable projects, live charts, a water-footprint calculator, a quiz, a pledge reef and a clean-up mini-game.</p>
+          <div class="tech-stack">
+            <span class="tech-chip">HTML</span>
+            <span class="tech-chip">CSS</span>
+            <span class="tech-chip">JavaScript</span>
+            <span class="tech-chip">Canvas</span>
+          </div>
+          <div class="project-links">
+            <a class="proj-link" href="https://aquatica.rakkora.org" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+              Visit site ↗
+            </a>
+            <a class="proj-link" href="https://github.com/nimuthuSW/aquatica" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+              GitHub
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card tilt-3d reveal delay-2" data-tilt-max="9">
+        <div class="tilt-glare"></div>
+        <div class="project-img">
+          <img src="images/project_designmaniac.webp" alt="Design Maniac website home page"/>
+          <span class="project-badge live">Live</span>
+        </div>
+        <div class="project-body">
+          <div class="project-index">02 — Featured</div>
+          <h3 class="project-title">Design Maniac</h3>
+          <p class="project-desc">A design-forward portfolio built to show off interface, motion and craft — staggered type reveals, dark/light themes, an interactive playground and fully responsive, accessible layouts.</p>
+          <div class="tech-stack">
+            <span class="tech-chip">React</span>
+            <span class="tech-chip">Vite</span>
+            <span class="tech-chip">Framer Motion</span>
+          </div>
+          <div class="project-links">
+            <a class="proj-link" href="https://designmaniac.rakkora.org" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+              Visit site ↗
+            </a>
+            <a class="proj-link" href="https://github.com/nimuthuSW/design-maniac" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+              GitHub
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card tilt-3d reveal delay-3" data-tilt-max="9">
+        <div class="tilt-glare"></div>
+        <div class="project-img">
+          <img src="images/project_roviotek_live.webp" alt="RovioTek website"/>
+          <span class="project-badge live">Live</span>
+        </div>
+        <div class="project-body">
+          <div class="project-index">03 — Featured</div>
+          <h3 class="project-title">RovioTek Website</h3>
+          <p class="project-desc">A modern business website created for RovioTek presenting team, services and digital solutions in a visually engaging, responsive format.</p>
+          <div class="tech-stack">
+            <span class="tech-chip">React</span>
+            <span class="tech-chip">CSS</span>
+            <span class="tech-chip">JavaScript</span>
+          </div>
+          <div class="project-links">
+            <a class="proj-link" href="https://roviotek.web.app/" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+              Visit site ↗
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card tilt-3d reveal delay-1" data-tilt-max="9">
+        <div class="tilt-glare"></div>
+        <div class="project-img">
+          <img src="images/project_scoppa.webp" alt="Scoppa online store home page"/>
+          <span class="project-badge live">Live</span>
+        </div>
+        <div class="project-body">
+          <div class="project-index">04 — Featured</div>
+          <h3 class="project-title">Scoppa</h3>
+          <p class="project-desc">A full-stack e-commerce store — product catalogue with search, a stock-aware cart, accounts, Stripe card checkout plus bank transfer and cash on delivery, order history and a role-gated admin panel.</p>
+          <div class="tech-stack">
+            <span class="tech-chip">Next.js</span>
+            <span class="tech-chip">Prisma</span>
+            <span class="tech-chip">Auth.js</span>
+            <span class="tech-chip">Stripe</span>
+            <span class="tech-chip">Tailwind</span>
+          </div>
+          <div class="project-links">
+            <a class="proj-link" href="https://scoppa-6zuwuy3at-nimuthusw.vercel.app/" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+              Visit site ↗
+            </a>
+            <a class="proj-link" href="https://github.com/nimuthuSW/Scoppa" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+              GitHub
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card tilt-3d reveal delay-2" data-tilt-max="9">
+        <div class="tilt-glare"></div>
+        <div class="project-img">
+          <img src="images/project_librioo.webp" alt="Librioo"/>
           <span class="project-badge in-progress">In Progress</span>
         </div>
         <div class="project-body">
-          <div class="project-index">Project 01 — Featured</div>
+          <div class="project-index">05</div>
           <h3 class="project-title">Librioo</h3>
-          <p class="project-desc">A smart library assistant robot combining embedded systems, web technologies, and backend services to help users navigate and improve the library experience.</p>
+          <p class="project-desc">A smart library assistant robot combining embedded systems, web technologies and backend services to help users navigate and improve the library experience.</p>
           <div class="tech-stack">
             <span class="tech-chip">Spring Boot</span>
             <span class="tech-chip">React</span>
@@ -1573,20 +1699,20 @@ footer {
             </a>
             <a class="proj-link" href="https://youtu.be/OEIA4YoU0E8" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
-              Live Demo
+              ▶ Demo
             </a>
           </div>
         </div>
       </div>
 
-      <div class="project-card tilt-3d reveal delay-2" data-tilt-max="9">
+      <div class="project-card tilt-3d reveal delay-3" data-tilt-max="9">
         <div class="tilt-glare"></div>
         <div class="project-img">
-          <img src="images/project_feedthefuture.png" alt="Zero Hunger"/>
+          <img src="images/project_feedthefuture.webp" alt="Zero Hunger website"/>
           <span class="project-badge">Completed</span>
         </div>
         <div class="project-body">
-          <div class="project-index">Project 02</div>
+          <div class="project-index">06</div>
           <h3 class="project-title">Zero Hunger Website</h3>
           <p class="project-desc">A website based on the UN SDG Zero Hunger goal, raising awareness and providing information and support options related to ending hunger.</p>
           <div class="tech-stack">
@@ -1599,74 +1725,18 @@ footer {
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
               GitHub
             </a>
-            <a class="proj-link" href="https://github.com/nimuthuSW/Feed-The-Future" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
-              Overview
-            </a>
           </div>
         </div>
       </div>
 
-      <div class="project-card tilt-3d reveal delay-3" data-tilt-max="9">
+      <div class="project-card tilt-3d reveal delay-1" data-tilt-max="9">
         <div class="tilt-glare"></div>
         <div class="project-img">
-          <img src="images/project_odecs.png" alt="ODECS"/>
+          <img src="images/project_showdown.webp" alt="Scrabble Showdown website"/>
           <span class="project-badge">Completed</span>
         </div>
         <div class="project-body">
-          <div class="project-index">Project 03</div>
-          <h3 class="project-title">ODECS Website</h3>
-          <p class="project-desc">A professional company website for ODECS showcasing services, projects, and contact info through a clean and responsive modern web interface.</p>
-          <div class="tech-stack">
-            <span class="tech-chip">React</span>
-            <span class="tech-chip">CSS</span>
-            <span class="tech-chip">JavaScript</span>
-          </div>
-          <div class="project-links">
-            <a class="proj-link" href="https://github.com/nimuthuSW/odecs-website" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-              GitHub
-            </a>
-            <a class="proj-link" href="https://github.com/nimuthuSW/odecs-website" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
-              Overview
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card tilt-3d reveal delay-2" data-tilt-max="9">
-        <div class="tilt-glare"></div>
-        <div class="project-img">
-          <img src="images/project_roviotek.png" alt="RovioTek"/>
-          <span class="project-badge">Completed</span>
-        </div>
-        <div class="project-body">
-          <div class="project-index">Project 04</div>
-          <h3 class="project-title">RovioTek Website</h3>
-          <p class="project-desc">A modern business website created for RovioTek presenting team, services, and digital solutions in a visually engaging and responsive format.</p>
-          <div class="tech-stack">
-            <span class="tech-chip">React</span>
-            <span class="tech-chip">CSS</span>
-            <span class="tech-chip">JavaScript</span>
-          </div>
-          <div class="project-links">
-            <a class="proj-link" href="https://github.com/nimuthuSW" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-              GitHub
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card tilt-3d reveal delay-3" data-tilt-max="9">
-        <div class="tilt-glare"></div>
-        <div class="project-img">
-          <img src="images/project_showdown.png" alt="Showdown"/>
-          <span class="project-badge">Completed</span>
-        </div>
-        <div class="project-body">
-          <div class="project-index">Project 05</div>
+          <div class="project-index">07</div>
           <h3 class="project-title">Scrabble Showdown</h3>
           <p class="project-desc">A website developed for Richmond Scrabble Showdown for live results and pairings management during the competition.</p>
           <div class="tech-stack">
@@ -1679,9 +1749,29 @@ footer {
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
               GitHub
             </a>
-            <a class="proj-link" href="https://github.com/nimuthuSW/Richmond_Showdown" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
-              Overview
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card tilt-3d reveal delay-2" data-tilt-max="9">
+        <div class="tilt-glare"></div>
+        <div class="project-img">
+          <img src="images/project_odecs.webp" alt="ODECS website"/>
+          <span class="project-badge">Completed</span>
+        </div>
+        <div class="project-body">
+          <div class="project-index">08</div>
+          <h3 class="project-title">ODECS Website</h3>
+          <p class="project-desc">A professional company website for ODECS showcasing services, projects and contact info through a clean, responsive, modern interface.</p>
+          <div class="tech-stack">
+            <span class="tech-chip">React</span>
+            <span class="tech-chip">CSS</span>
+            <span class="tech-chip">JavaScript</span>
+          </div>
+          <div class="project-links">
+            <a class="proj-link" href="https://github.com/nimuthuSW/odecs-website" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+              GitHub
             </a>
           </div>
         </div>
@@ -1967,8 +2057,12 @@ function applyPortfolioData(data) {
   if (Array.isArray(data.projects) && data.projects.length > 0) {
     const grid = document.getElementById('projectsGrid');
     const countEl = document.getElementById('projectsCount');
+    const heroStatEl = document.getElementById('heroProjectsStat');
     if (countEl) {
       countEl.textContent = `${data.projects.length} ${data.projects.length === 1 ? 'Work' : 'Works'}`;
+    }
+    if (heroStatEl) {
+      heroStatEl.textContent = `${data.projects.length}+`;
     }
     if (grid) {
       const ghIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>`;
@@ -1976,14 +2070,16 @@ function applyPortfolioData(data) {
 
       grid.innerHTML = data.projects.map((p, idx) => {
         const delayCls = `delay-${(idx % 3) + 1}`;
-        const badgeCls = p.statusType === 'in-progress' ? 'project-badge in-progress' : 'project-badge';
+        const badgeCls = p.statusType === 'in-progress'
+          ? 'project-badge in-progress'
+          : (p.statusType === 'live' ? 'project-badge live' : 'project-badge');
         const techHtml = (p.techStack || []).map(t => `<span class="tech-chip">${escapeHtml(t)}</span>`).join('');
         const links = [];
+        if (p.demoUrl) {
+          links.push(`<a class="proj-link" href="${escapeHtml(p.demoUrl)}" target="_blank" rel="noopener">${demoIcon}${escapeHtml(p.demoLabel || 'Visit site ↗')}</a>`);
+        }
         if (p.githubUrl) {
           links.push(`<a class="proj-link" href="${escapeHtml(p.githubUrl)}" target="_blank" rel="noopener">${ghIcon}GitHub</a>`);
-        }
-        if (p.demoUrl) {
-          links.push(`<a class="proj-link" href="${escapeHtml(p.demoUrl)}" target="_blank" rel="noopener">${demoIcon}${escapeHtml(p.demoLabel || 'Live Demo')}</a>`);
         }
         return `
           <div class="project-card tilt-3d reveal visible ${delayCls}" data-tilt-max="9">
@@ -1993,7 +2089,7 @@ function applyPortfolioData(data) {
               <span class="${badgeCls}">${escapeHtml(p.status || 'Completed')}</span>
             </div>
             <div class="project-body">
-              <div class="project-index">${escapeHtml(p.indexLabel || `Project ${String(idx + 1).padStart(2, '0')}`)}</div>
+              <div class="project-index">${escapeHtml(p.indexLabel || String(idx + 1).padStart(2, '0'))}</div>
               <h3 class="project-title">${escapeHtml(p.title)}</h3>
               <p class="project-desc">${escapeHtml(p.description)}</p>
               <div class="tech-stack">${techHtml}</div>
