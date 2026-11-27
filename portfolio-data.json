@@ -14,23 +14,6 @@
   },
   "projects": [
     {
-      "id": "proj-1795762599016",
-      "indexLabel": "Project 05",
-      "title": "Aquatica",
-      "status": "Completed",
-      "statusType": "completed",
-      "image": "images/1795762673136_Screenshot_2026-11-27_at_12.27.44.png",
-      "description": "Describe what this project does and the impact it creates.",
-      "techStack": [
-        "React",
-        "JavaScript",
-        "CSS"
-      ],
-      "githubUrl": "https://github.com/nimuthuSW",
-      "demoUrl": "https://aquatica.rakkora.org/",
-      "demoLabel": "Live Demo"
-    },
-    {
       "id": "proj-1",
       "indexLabel": "01 — Featured",
       "title": "Aquatica",
