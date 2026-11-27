@@ -14,6 +14,23 @@
   },
   "projects": [
     {
+      "id": "proj-1795762599016",
+      "indexLabel": "Project 05",
+      "title": "Aquatica",
+      "status": "Completed",
+      "statusType": "completed",
+      "image": "images/1795762673136_Screenshot_2026-11-27_at_12.27.44.png",
+      "description": "Describe what this project does and the impact it creates.",
+      "techStack": [
+        "React",
+        "JavaScript",
+        "CSS"
+      ],
+      "githubUrl": "https://github.com/nimuthuSW",
+      "demoUrl": "https://aquatica.rakkora.org/",
+      "demoLabel": "Live Demo"
+    },
+    {
       "id": "proj-1",
       "indexLabel": "Project 01 — Featured",
       "title": "Librioo",
@@ -21,23 +38,15 @@
       "statusType": "in-progress",
       "image": "images/project_librioo.png",
       "description": "A smart library assistant robot combining embedded systems, web technologies, and backend services to help users navigate and improve the library experience.",
-      "techStack": ["Spring Boot", "React", "MySQL", "Arduino / ESP32"],
+      "techStack": [
+        "Spring Boot",
+        "React",
+        "MySQL",
+        "Arduino / ESP32"
+      ],
       "githubUrl": "https://github.com/projectlibrioo-source/librioo-system",
       "demoUrl": "https://youtu.be/OEIA4YoU0E8",
       "demoLabel": "Live Demo"
-    },
-    {
-      "id": "proj-2",
-      "indexLabel": "Project 02",
-      "title": "Zero Hunger Website",
-      "status": "Completed",
-      "statusType": "completed",
-      "image": "images/project_feedthefuture.png",
-      "description": "A website based on the UN SDG Zero Hunger goal, raising awareness and providing information and support options related to ending hunger.",
-      "techStack": ["HTML", "CSS", "JavaScript"],
-      "githubUrl": "https://github.com/nimuthuSW/Feed-The-Future",
-      "demoUrl": "https://github.com/nimuthuSW/Feed-The-Future",
-      "demoLabel": "Overview"
     },
     {
       "id": "proj-3",
@@ -47,7 +56,11 @@
       "statusType": "completed",
       "image": "images/project_odecs.png",
       "description": "A professional company website for ODECS showcasing services, projects, and contact info through a clean and responsive modern web interface.",
-      "techStack": ["React", "CSS", "JavaScript"],
+      "techStack": [
+        "React",
+        "CSS",
+        "JavaScript"
+      ],
       "githubUrl": "https://github.com/nimuthuSW/odecs-website",
       "demoUrl": "https://github.com/nimuthuSW/odecs-website",
       "demoLabel": "Overview"
@@ -60,23 +73,14 @@
       "statusType": "completed",
       "image": "images/project_roviotek.png",
       "description": "A modern business website created for RovioTek presenting team, services, and digital solutions in a visually engaging and responsive format.",
-      "techStack": ["React", "CSS", "JavaScript"],
+      "techStack": [
+        "React",
+        "CSS",
+        "JavaScript"
+      ],
       "githubUrl": "https://github.com/nimuthuSW",
       "demoUrl": "",
       "demoLabel": ""
-    },
-    {
-      "id": "proj-5",
-      "indexLabel": "Project 05",
-      "title": "Scrabble Showdown",
-      "status": "Completed",
-      "statusType": "completed",
-      "image": "images/project_showdown.png",
-      "description": "A website developed for Richmond Scrabble Showdown for live results and pairings management during the competition.",
-      "techStack": ["HTML", "CSS", "JavaScript"],
-      "githubUrl": "https://github.com/nimuthuSW/Richmond_Showdown",
-      "demoUrl": "https://github.com/nimuthuSW/Richmond_Showdown",
-      "demoLabel": "Overview"
     }
   ],
   "skills": [
