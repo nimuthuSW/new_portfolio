@@ -451,14 +451,19 @@ nav.scrolled {
 .hero-img-wrap:hover::before {
   transform: translateZ(-42px) translate(8px, 8px);
 }
-.hero-img-wrap img {
-  width: clamp(230px, 25vw, 370px);
-  height: auto; display: block;
-  filter: grayscale(12%);
-  transition: filter 0.4s ease;
+.hero-img-wrap img,
+.hero-img-wrap canvas.dot-matrix-canvas {
+  width: clamp(240px, 26vw, 370px);
+  height: auto;
+  display: block;
 }
-.hero-img-wrap:hover img {
-  filter: grayscale(0%);
+.hero-img-wrap canvas.dot-matrix-canvas {
+  aspect-ratio: 840 / 984;
+  background: #141815;
+  cursor: crosshair;
+}
+.hero-img-wrap img.dot-matrix-hidden {
+  display: none;
 }
 .hero-float-badge {
   position: absolute;
@@ -1169,8 +1174,9 @@ footer {
     order: -1;
     justify-content: flex-start;
   }
-  .hero-img-wrap img {
-    width: clamp(220px, 42vw, 310px);
+  .hero-img-wrap img,
+  .hero-img-wrap canvas.dot-matrix-canvas {
+    width: clamp(230px, 42vw, 310px);
   }
   .about-inner {
     grid-template-columns: 1fr;
@@ -1285,8 +1291,9 @@ footer {
   .hero-stage {
     justify-content: center;
   }
-  .hero-img-wrap img {
-    width: min(72vw, 270px);
+  .hero-img-wrap img,
+  .hero-img-wrap canvas.dot-matrix-canvas {
+    width: min(74vw, 280px);
   }
   .hero-stats {
     grid-template-columns: repeat(3, 1fr);
@@ -1445,10 +1452,11 @@ footer {
       </div>
     </div>
     <div class="hero-stage">
-      <div class="hero-img-wrap tilt-3d" data-tilt-max="12">
+      <div class="hero-img-wrap tilt-3d" id="heroImgWrap" data-tilt-max="12">
         <div class="tilt-glare"></div>
         <div class="hero-float-tile" aria-hidden="true">N<sub>1</sub></div>
-        <img src="images/nimu_face_dot_matrix.png" data-cms-image="heroPortrait" alt="Nimuthu Witharana"/>
+        <canvas id="heroDotCanvas" class="dot-matrix-canvas" width="420" height="492" aria-label="Interactive pixel dot-matrix portrait of Nimuthu Witharana"></canvas>
+        <img src="images/nimu_face_dot_matrix.png" id="heroPortraitImg" class="dot-matrix-hidden" data-cms-image="heroPortrait" alt="Nimuthu Witharana"/>
         <div class="hero-float-badge">BEng Software Eng.</div>
       </div>
     </div>
@@ -2050,6 +2058,9 @@ function applyPortfolioData(data) {
       document.querySelectorAll(`[data-cms-image="${key}"]`).forEach(img => {
         img.src = src;
       });
+      if (key === 'heroPortrait' && typeof window.reloadHeroDotMatrix === 'function') {
+        window.reloadHeroDotMatrix(src);
+      }
     });
   }
 
@@ -2300,6 +2311,228 @@ lightbox.addEventListener('click', e => {
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && lightbox.classList.contains('open')) closeMoment();
 });
+// ── Interactive Animated Pixel Dot-Matrix Portrait ──
+(function initAnimatedDotMatrixPortrait() {
+  const canvas = document.getElementById('heroDotCanvas');
+  const fallbackImg = document.getElementById('heroPortraitImg');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  const COLS = 64;
+  const ROWS = 75;
+  let dots = [];
+  let bgDots = [];
+  let cw = 420, ch = 492, cellW = 6.5, cellH = 6.5;
+  let pointer = { x: -9999, y: -9999, active: false };
+  let shockwave = { x: 0, y: 0, time: -999 };
+  let startTime = performance.now();
+
+  function setupCanvasSize() {
+    const rect = canvas.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cw = Math.max(240, rect.width || 340);
+    ch = Math.round(cw * (984 / 840));
+    canvas.width = cw * dpr;
+    canvas.height = ch * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    cellW = cw / COLS;
+    cellH = ch / ROWS;
+
+    bgDots = [];
+    for (let gy = 0; gy < ROWS; gy++) {
+      for (let gx = 0; gx < COLS; gx++) {
+        bgDots.push({
+          hx: (gx + 0.5) * cellW,
+          hy: (gy + 0.5) * cellH
+        });
+      }
+    }
+    dots.forEach(d => {
+      d.hx = (d.gx + 0.5) * cellW;
+      d.hy = (d.gy + 0.5) * cellH;
+      if (!d.initialized) {
+        d.x = d.hx + (Math.random() - 0.5) * 40;
+        d.y = d.hy + (Math.random() - 0.5) * 40;
+        d.initialized = true;
+      }
+    });
+  }
+
+  function sampleSourceImage(imgSrc) {
+    const srcImg = new Image();
+    srcImg.crossOrigin = 'anonymous';
+    srcImg.onload = () => {
+      const off = document.createElement('canvas');
+      off.width = COLS;
+      off.height = ROWS;
+      const octx = off.getContext('2d');
+
+      // If using original full portrait nimu_1.png (440x566), crop to face & shoulders; otherwise fit full image
+      const isOriginalFull = imgSrc.includes('nimu_1.png');
+      if (isOriginalFull) {
+        octx.drawImage(srcImg, 80, 12, 280, 328, 0, 0, COLS, ROWS);
+      } else {
+        octx.drawImage(srcImg, 0, 0, COLS, ROWS);
+      }
+
+      const imgData = octx.getImageData(0, 0, COLS, ROWS).data;
+      const newDots = [];
+      for (let gy = 0; gy < ROWS; gy++) {
+        for (let gx = 0; gx < COLS; gx++) {
+          const i = (gy * COLS + gx) * 4;
+          const r = imgData[i], g = imgData[i + 1], b = imgData[i + 2], a = imgData[i + 3];
+          if (a < 40) continue;
+
+          // Skip dark background grid pixels if sampling from pre-rendered dot-matrix PNG
+          if (!isOriginalFull && r < 32 && g < 38 && b < 34) continue;
+
+          const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+          const mr = Math.min(255, Math.round(r * 0.88 + 127 * 0.14 * lum));
+          const mg = Math.min(255, Math.round(g * 0.85 + 212 * 0.18 * lum));
+          const mb = Math.min(255, Math.round(b * 0.88 + 131 * 0.14 * lum));
+
+          newDots.push({
+            gx, gy,
+            hx: (gx + 0.5) * cellW,
+            hy: (gy + 0.5) * cellH,
+            x: (gx + 0.5) * cellW,
+            y: (gy + 0.5) * cellH - 18,
+            vx: 0, vy: 0,
+            r: mr, g: mg, b: mb,
+            lum,
+            alphaFactor: a / 255,
+            phase: (gx * 0.22 + gy * 0.18),
+            delay: (gy / ROWS) * 650 + Math.random() * 180,
+            initialized: true
+          });
+        }
+      }
+      dots = newDots;
+      startTime = performance.now();
+      setupCanvasSize();
+    };
+    srcImg.onerror = () => {
+      canvas.style.display = 'none';
+      if (fallbackImg) fallbackImg.classList.remove('dot-matrix-hidden');
+    };
+    srcImg.src = imgSrc;
+  }
+
+  // Default to sampling clean face & shoulders from images/nimu_1.png so every grid cell maps 1:1 to an LED dot
+  window.reloadHeroDotMatrix = function(customSrc) {
+    const useOriginal = !customSrc || customSrc.includes('nimu_face_dot_matrix') || customSrc.includes('nimu_dot_matrix') || customSrc.includes('nimu_1');
+    sampleSourceImage(useOriginal ? 'images/nimu_1.png' : customSrc);
+  };
+
+  setupCanvasSize();
+  window.reloadHeroDotMatrix();
+  window.addEventListener('resize', setupCanvasSize, { passive: true });
+
+  canvas.addEventListener('pointermove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    pointer.x = e.clientX - rect.left;
+    pointer.y = e.clientY - rect.top;
+    pointer.active = true;
+  });
+  canvas.addEventListener('pointerleave', () => {
+    pointer.active = false;
+    pointer.x = -9999;
+    pointer.y = -9999;
+  });
+  canvas.addEventListener('click', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    shockwave.x = e.clientX - rect.left;
+    shockwave.y = e.clientY - rect.top;
+    shockwave.time = performance.now();
+    // Apply radial impulse
+    dots.forEach(d => {
+      const dx = d.x - shockwave.x;
+      const dy = d.y - shockwave.y;
+      const dist = Math.hypot(dx, dy) || 1;
+      if (dist < 140) {
+        const force = (1 - dist / 140) * 11;
+        d.vx += (dx / dist) * force;
+        d.vy += (dy / dist) * force;
+      }
+    });
+  });
+
+  let heroInView = true;
+  const obs = new IntersectionObserver((entries) => {
+    heroInView = entries[0].isIntersecting;
+  });
+  obs.observe(canvas);
+
+  function renderFrame(now) {
+    if (heroInView && dots.length > 0) {
+      ctx.fillStyle = '#141815';
+      ctx.fillRect(0, 0, cw, ch);
+
+      // 1. Subtle background inactive LED matrix grid
+      ctx.fillStyle = 'rgba(65, 86, 68, 0.35)';
+      const bgR = Math.max(0.7, cellW * 0.14);
+      ctx.beginPath();
+      for (let i = 0; i < bgDots.length; i++) {
+        const b = bgDots[i];
+        ctx.moveTo(b.hx + bgR, b.hy);
+        ctx.arc(b.hx, b.hy, bgR, 0, Math.PI * 2);
+      }
+      ctx.fill();
+
+      // 2. Holographic scanline sweep position (loops every 3.4s)
+      const elapsed = now - startTime;
+      const scanY = ((now * 0.11) % (ch + 120)) - 60;
+      const repelRadius = 56;
+
+      for (let i = 0; i < dots.length; i++) {
+        const d = dots[i];
+        // Boot-up entrance scale
+        const bootProgress = Math.max(0, Math.min(1, (elapsed - d.delay) / 480));
+        if (bootProgress <= 0) continue;
+
+        // Pointer magnetic repulsion
+        if (pointer.active) {
+          const dx = d.x - pointer.x;
+          const dy = d.y - pointer.y;
+          const distSq = dx * dx + dy * dy;
+          if (distSq < repelRadius * repelRadius) {
+            const dist = Math.sqrt(distSq) || 1;
+            const push = (1 - dist / repelRadius) * 2.4;
+            d.vx += (dx / dist) * push;
+            d.vy += (dy / dist) * push;
+          }
+        }
+
+        // Spring back to home cell
+        d.vx += (d.hx - d.x) * 0.14;
+        d.vy += (d.hy - d.y) * 0.14;
+        d.vx *= 0.76;
+        d.vy *= 0.76;
+        d.x += d.vx;
+        d.y += d.vy;
+
+        // Ambient breathing + scanline boost
+        const pulse = 1 + 0.08 * Math.sin(now * 0.0035 + d.phase);
+        const scanDist = Math.abs(d.y - scanY);
+        const scanBoost = scanDist < 34 ? (1 - scanDist / 34) : 0;
+
+        const baseRadius = (cellW * 0.46) * (0.50 + 0.50 * Math.pow(d.lum, 0.7)) * d.alphaFactor;
+        const rad = Math.max(0.8, baseRadius * bootProgress * pulse * (1 + scanBoost * 0.28));
+
+        const r = Math.min(255, Math.round(d.r + scanBoost * 45));
+        const g = Math.min(255, Math.round(d.g + scanBoost * 85));
+        const b = Math.min(255, Math.round(d.b + scanBoost * 48));
+
+        ctx.fillStyle = `rgb(${r},${g},${b})`;
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, rad, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    requestAnimationFrame(renderFrame);
+  }
+  requestAnimationFrame(renderFrame);
+})();
 </script>
 </body>
 </html>
