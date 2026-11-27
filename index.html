@@ -2318,8 +2318,8 @@ document.addEventListener('keydown', e => {
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
 
-  const COLS = 64;
-  const ROWS = 75;
+  const COLS = 112;
+  const ROWS = 131;
   let dots = [];
   let bgDots = [];
   let cw = 420, ch = 492, cellW = 6.5, cellH = 6.5;
@@ -2470,7 +2470,7 @@ document.addEventListener('keydown', e => {
 
       // 1. Subtle background inactive LED matrix grid
       ctx.fillStyle = 'rgba(65, 86, 68, 0.35)';
-      const bgR = Math.max(0.7, cellW * 0.14);
+      const bgR = Math.max(0.45, cellW * 0.14);
       ctx.beginPath();
       for (let i = 0; i < bgDots.length; i++) {
         const b = bgDots[i];
@@ -2516,8 +2516,8 @@ document.addEventListener('keydown', e => {
         const scanDist = Math.abs(d.y - scanY);
         const scanBoost = scanDist < 34 ? (1 - scanDist / 34) : 0;
 
-        const baseRadius = (cellW * 0.46) * (0.50 + 0.50 * Math.pow(d.lum, 0.7)) * d.alphaFactor;
-        const rad = Math.max(0.8, baseRadius * bootProgress * pulse * (1 + scanBoost * 0.28));
+        const baseRadius = (cellW * 0.45) * (0.50 + 0.50 * Math.pow(d.lum, 0.7)) * d.alphaFactor;
+        const rad = Math.max(0.5, baseRadius * bootProgress * pulse * (1 + scanBoost * 0.28));
 
         const r = Math.min(255, Math.round(d.r + scanBoost * 45));
         const g = Math.min(255, Math.round(d.g + scanBoost * 85));
