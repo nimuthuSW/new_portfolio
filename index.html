@@ -1089,57 +1089,178 @@ nav.scrolled {
   color: #888;
 }
 
-/* ───── SKILLS ───── */
+/* ───── SKILLS (3D CARD DECK DEAL) ───── */
 #skills {
   background: linear-gradient(135deg, var(--bg-dark2) 0%, var(--bg-dark) 100%);
   padding: 7rem 6vw;
+  position: relative;
 }
-.skills-inner { width: 100%; max-width: 1400px; margin: 0 auto; }
+.skills-inner { width: 100%; max-width: 1280px; margin: 0 auto; }
 
+.skills-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 4rem;
+  padding-bottom: 1.8rem;
+  border-bottom: 1px solid var(--border-dark);
+}
 .skills-heading {
   font-family: 'Syne', sans-serif;
   font-size: clamp(2.8rem, 5.5vw, 5.8rem);
   font-weight: 800; line-height: 1;
   letter-spacing: -0.02em;
   color: var(--accent-lt);
-  margin-bottom: 4.5rem; text-align: right;
+  margin: 0;
+}
+.redeal-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-lt);
+  background: rgba(90, 138, 90, 0.12);
+  border: 1px solid rgba(127, 184, 131, 0.35);
+  padding: 10px 18px;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.25s ease;
+}
+.redeal-btn:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent-lt);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(90, 138, 90, 0.28);
+}
+.redeal-btn svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.redeal-btn:hover svg {
+  transform: rotate(180deg);
 }
 
 .skills-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 1rem;
-  perspective: 1100px;
+  grid-template-columns: repeat(auto-fill, minmax(158px, 1fr));
+  gap: 1.4rem;
+  perspective: 1400px;
+  position: relative;
 }
 
 .skill-item {
-  background: #1f1f1f;
-  border: 1px solid var(--border-dark);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 1rem;
-  padding: 2.1rem 1rem;
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25);
+  --deal-x: 0px;
+  --deal-y: 0px;
+  --deal-rot: 0deg;
+  --deal-delay: 0ms;
+  --card-fan: 0deg;
+  aspect-ratio: 3 / 4.1;
+  background: linear-gradient(160deg, #252925 0%, #191b19 100%);
+  border: 1px solid rgba(127, 184, 131, 0.28);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.8rem 1rem;
+  position: relative;
+  box-shadow:
+    0 18px 36px rgba(0, 0, 0, 0.42),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  transform-style: preserve-3d;
+  opacity: 0;
+  transform:
+    perspective(1200px)
+    translate3d(var(--deal-x), var(--deal-y), -110px)
+    rotateZ(var(--deal-rot))
+    rotateY(180deg)
+    scale(0.76);
+  transition:
+    transform 0.82s cubic-bezier(0.2, 0.9, 0.24, 1.04) var(--deal-delay),
+    opacity 0.28s ease var(--deal-delay),
+    box-shadow 0.35s ease,
+    border-color 0.3s ease,
+    background 0.3s ease;
+}
+.skill-item::before {
+  content: '';
+  position: absolute;
+  inset: 7px;
+  border-radius: 9px;
+  border: 1px dashed rgba(127, 184, 131, 0.14);
+  pointer-events: none;
+}
+.skill-card-corner {
+  position: absolute;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  color: rgba(127, 184, 131, 0.65);
+  line-height: 1.1;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.skill-card-corner.top-left {
+  top: 12px;
+  left: 13px;
+}
+.skill-card-corner.bottom-right {
+  bottom: 12px;
+  right: 13px;
+  transform: rotate(180deg);
+}
+.skill-card-corner span {
+  font-size: 0.55rem;
+  color: var(--accent-lt);
+}
+
+.skill-item.dealt {
+  opacity: 1;
+  transform:
+    perspective(1200px)
+    rotate(var(--card-fan))
+    rotateX(var(--rx, 0deg))
+    rotateY(var(--ry, 0deg))
+    translate3d(0, 0, var(--tz, 0px));
+}
+.skill-item.dealt.is-tilting {
+  transition: transform 0.08s ease-out, box-shadow 0.25s ease, border-color 0.3s ease;
 }
 .skill-item:hover {
-  background: #272d27;
+  background: linear-gradient(160deg, #2d362d 0%, #1e241e 100%);
   border-color: var(--accent-lt);
-  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.45);
+  box-shadow:
+    0 26px 52px rgba(0, 0, 0, 0.6),
+    0 0 24px rgba(127, 184, 131, 0.16);
+  z-index: 10;
 }
 .skill-item img {
-  width: 52px; height: 52px; object-fit: contain;
+  width: 56px; height: 56px; object-fit: contain;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.35));
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .skill-item:hover img {
-  transform: translateZ(26px) scale(1.12);
+  transform: translateZ(30px) scale(1.14);
 }
 .skill-name {
   font-family: 'DM Mono', monospace;
-  font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase;
+  font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
   color: var(--text-pale); text-align: center;
-  transition: color 0.25s;
+  transition: color 0.25s, transform 0.3s ease;
 }
 .skill-item:hover .skill-name {
   color: #fff;
+  transform: translateZ(18px);
 }
 
 /* ───── CONTACT ───── */
@@ -1993,52 +2114,76 @@ footer {
 <!-- ── SKILLS ── -->
 <section id="skills">
   <div class="skills-inner">
-    <h2 class="skills-heading reveal">Skills</h2>
+    <div class="skills-header reveal">
+      <h2 class="skills-heading">Skills</h2>
+      <button class="redeal-btn" id="redealSkillsBtn" type="button" aria-label="Re-deal skill cards">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        Deal Deck
+      </button>
+    </div>
     <div class="skills-grid" id="skillsGrid">
-      <div class="skill-item tilt-3d reveal delay-1" data-tilt-max="14">
+      <div class="skill-item tilt-3d" data-tilt-max="14">
         <div class="tilt-glare"></div>
+        <div class="skill-card-corner top-left">01<span>♠</span></div>
         <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python"/>
         <span class="skill-name">Python</span>
+        <div class="skill-card-corner bottom-right">01<span>♠</span></div>
       </div>
-      <div class="skill-item tilt-3d reveal delay-2" data-tilt-max="14">
+      <div class="skill-item tilt-3d" data-tilt-max="14">
         <div class="tilt-glare"></div>
+        <div class="skill-card-corner top-left">02<span>♦</span></div>
         <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg" alt="Spring Boot"/>
         <span class="skill-name">Spring Boot</span>
+        <div class="skill-card-corner bottom-right">02<span>♦</span></div>
       </div>
-      <div class="skill-item tilt-3d reveal delay-3" data-tilt-max="14">
+      <div class="skill-item tilt-3d" data-tilt-max="14">
         <div class="tilt-glare"></div>
+        <div class="skill-card-corner top-left">03<span>♣</span></div>
         <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React"/>
         <span class="skill-name">React JS</span>
+        <div class="skill-card-corner bottom-right">03<span>♣</span></div>
       </div>
-      <div class="skill-item tilt-3d reveal delay-1" data-tilt-max="14">
+      <div class="skill-item tilt-3d" data-tilt-max="14">
         <div class="tilt-glare"></div>
+        <div class="skill-card-corner top-left">04<span>♥</span></div>
         <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL"/>
         <span class="skill-name">MySQL</span>
+        <div class="skill-card-corner bottom-right">04<span>♥</span></div>
       </div>
-      <div class="skill-item tilt-3d reveal delay-2" data-tilt-max="14">
+      <div class="skill-item tilt-3d" data-tilt-max="14">
         <div class="tilt-glare"></div>
+        <div class="skill-card-corner top-left">05<span>♠</span></div>
         <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript"/>
         <span class="skill-name">JavaScript</span>
+        <div class="skill-card-corner bottom-right">05<span>♠</span></div>
       </div>
-      <div class="skill-item tilt-3d reveal delay-3" data-tilt-max="14">
+      <div class="skill-item tilt-3d" data-tilt-max="14">
         <div class="tilt-glare"></div>
+        <div class="skill-card-corner top-left">06<span>♦</span></div>
         <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/arduino/arduino-original.svg" alt="Arduino"/>
         <span class="skill-name">Arduino</span>
+        <div class="skill-card-corner bottom-right">06<span>♦</span></div>
       </div>
-      <div class="skill-item tilt-3d reveal delay-1" data-tilt-max="14">
+      <div class="skill-item tilt-3d" data-tilt-max="14">
         <div class="tilt-glare"></div>
+        <div class="skill-card-corner top-left">07<span>♣</span></div>
         <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" alt="Figma"/>
         <span class="skill-name">Figma</span>
+        <div class="skill-card-corner bottom-right">07<span>♣</span></div>
       </div>
-      <div class="skill-item tilt-3d reveal delay-2" data-tilt-max="14">
+      <div class="skill-item tilt-3d" data-tilt-max="14">
         <div class="tilt-glare"></div>
+        <div class="skill-card-corner top-left">08<span>♥</span></div>
         <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg" alt="Photoshop"/>
         <span class="skill-name">Photoshop</span>
+        <div class="skill-card-corner bottom-right">08<span>♥</span></div>
       </div>
-      <div class="skill-item tilt-3d reveal delay-3" data-tilt-max="14">
+      <div class="skill-item tilt-3d" data-tilt-max="14">
         <div class="tilt-glare"></div>
+        <div class="skill-card-corner top-left">09<span>♠</span></div>
         <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git"/>
         <span class="skill-name">Git</span>
+        <div class="skill-card-corner bottom-right">09<span>♠</span></div>
       </div>
     </div>
   </div>
@@ -2287,19 +2432,126 @@ function applyPortfolioData(data) {
   if (Array.isArray(data.skills) && data.skills.length > 0) {
     const skillsGrid = document.getElementById('skillsGrid');
     if (skillsGrid) {
+      const suits = ['♠', '♦', '♣', '♥'];
       skillsGrid.innerHTML = data.skills.map((s, idx) => {
-        const delayCls = `delay-${(idx % 3) + 1}`;
+        const num = String(idx + 1).padStart(2, '0');
+        const suit = suits[idx % suits.length];
         return `
-          <div class="skill-item tilt-3d reveal visible ${delayCls}" data-tilt-max="14">
+          <div class="skill-item tilt-3d" data-tilt-max="14">
             <div class="tilt-glare"></div>
+            <div class="skill-card-corner top-left">${num}<span>${suit}</span></div>
             <img src="${escapeHtml(s.icon)}" alt="${escapeHtml(s.name)}"/>
             <span class="skill-name">${escapeHtml(s.name)}</span>
+            <div class="skill-card-corner bottom-right">${num}<span>${suit}</span></div>
           </div>`;
       }).join('');
       bindTilt3D(skillsGrid);
+      if (typeof window.prepareAndDealSkills === 'function') {
+        window.prepareAndDealSkills(skillsInView);
+      }
     }
   }
 }
+
+// ── 3D Card Deck Dealing Engine for Skills Section ──
+let skillsInView = false;
+(function initSkillsCardDealer() {
+  const grid = document.getElementById('skillsGrid');
+  const redealBtn = document.getElementById('redealSkillsBtn');
+  if (!grid) return;
+
+  function computeDeckOffsets() {
+    const cards = Array.from(grid.querySelectorAll('.skill-item'));
+    if (!cards.length) return;
+
+    // Temporarily place cards in natural grid slots to measure exact offsets from deck origin (first card slot)
+    const wasDealt = cards.map(c => c.classList.contains('dealt'));
+    cards.forEach(c => {
+      c.style.transition = 'none';
+      c.classList.add('dealt');
+    });
+    void grid.offsetHeight;
+
+    const deckRect = cards[0].getBoundingClientRect();
+    const deckCx = deckRect.left + deckRect.width / 2;
+    const deckCy = deckRect.top + deckRect.height / 2;
+
+    cards.forEach((card, idx) => {
+      const r = card.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      const dx = Math.round(deckCx - cx);
+      const dy = Math.round(deckCy - cy);
+      const stackRot = ((idx % 2 === 0 ? -1 : 1) * (6 + (idx * 2.5) % 14)).toFixed(1);
+      const fanAngle = (((idx % 5) - 2) * 0.65).toFixed(2);
+
+      card.style.setProperty('--deal-x', `${dx}px`);
+      card.style.setProperty('--deal-y', `${dy}px`);
+      card.style.setProperty('--deal-rot', `${stackRot}deg`);
+      card.style.setProperty('--deal-delay', `${idx * 95}ms`);
+      card.style.setProperty('--card-fan', `${fanAngle}deg`);
+    });
+
+    cards.forEach((c, i) => {
+      if (!wasDealt[i]) c.classList.remove('dealt');
+    });
+    void grid.offsetHeight;
+    cards.forEach(c => {
+      c.style.transition = '';
+    });
+  }
+
+  window.prepareAndDealSkills = function(dealNow = true) {
+    const cards = Array.from(grid.querySelectorAll('.skill-item'));
+    cards.forEach(c => c.classList.remove('dealt'));
+    computeDeckOffsets();
+    if (dealNow) {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          cards.forEach(c => c.classList.add('dealt'));
+        });
+      });
+    }
+  };
+
+  window.prepareAndDealSkills(false);
+  window.addEventListener('resize', () => computeDeckOffsets(), { passive: true });
+
+  const dealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        skillsInView = true;
+        computeDeckOffsets();
+        requestAnimationFrame(() => {
+          grid.querySelectorAll('.skill-item').forEach(c => c.classList.add('dealt'));
+        });
+      } else {
+        skillsInView = false;
+        // Reset back into the deck when scrolled out of view so it deals fresh every time you scroll to Skills
+        grid.querySelectorAll('.skill-item').forEach(c => c.classList.remove('dealt'));
+      }
+    });
+  }, { threshold: 0.18 });
+
+  dealObserver.observe(grid);
+
+  if (redealBtn) {
+    redealBtn.addEventListener('click', () => {
+      const cards = Array.from(grid.querySelectorAll('.skill-item'));
+      // Gather all cards back into the deck first, then deal them out again
+      cards.forEach((c, idx) => {
+        c.style.setProperty('--deal-delay', `${(cards.length - 1 - idx) * 30}ms`);
+        c.classList.remove('dealt');
+      });
+      setTimeout(() => {
+        computeDeckOffsets();
+        requestAnimationFrame(() => {
+          cards.forEach(c => c.classList.add('dealt'));
+        });
+      }, 480);
+    });
+  }
+})();
 
 (async function loadPortfolioCMS() {
   try {
