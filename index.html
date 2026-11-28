@@ -232,10 +232,11 @@ nav.scrolled {
   --rx: 0deg;
   --ry: 0deg;
   --tz: 0px;
+  --base-rot: 0deg;
   --glare-x: 50%;
   --glare-y: 50%;
   --glare-op: 0;
-  transform: perspective(1100px) rotateX(var(--rx)) rotateY(var(--ry)) translate3d(0, 0, var(--tz));
+  transform: perspective(1100px) rotate(var(--base-rot)) rotateX(var(--rx)) rotateY(var(--ry)) translate3d(0, 0, var(--tz));
   transform-style: preserve-3d;
   transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.55s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease;
   will-change: transform;
@@ -562,47 +563,118 @@ nav.scrolled {
 }
 
 .about-images {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.4rem;
-  align-items: start;
-  perspective: 1100px;
+  position: relative;
+  width: 100%;
+  min-height: 560px;
+  perspective: 1200px;
 }
 .about-card-3d {
-  position: relative;
-  overflow: hidden;
-  border: 1px solid var(--border-dark);
-  background: #181818;
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+  position: absolute;
+  background: #f6f4ef;
+  padding: 10px 10px 34px 10px;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.48), 0 4px 12px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.45s ease, z-index 0s;
 }
-.about-card-3d:first-child {
-  grid-column: span 2;
+.about-card-3d::before {
+  content: '';
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  width: 56px;
+  height: 18px;
+  transform: translateX(-50%) rotate(-2deg);
+  background: rgba(232, 245, 233, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(2px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.14);
+  z-index: 6;
+  pointer-events: none;
 }
 .about-card-3d img {
   width: 100%;
   height: auto;
   object-fit: contain;
   display: block;
-  filter: grayscale(18%);
-  transition: filter 0.45s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  background: #1a1a1a;
+  filter: grayscale(10%) contrast(1.03);
+  transition: filter 0.4s ease;
+}
+.about-card-3d:hover {
+  z-index: 30 !important;
+  --tz: 26px;
+  box-shadow: 0 32px 70px rgba(0, 0, 0, 0.68), 0 0 0 2px var(--accent-lt);
 }
 .about-card-3d:hover img {
-  filter: grayscale(0%);
-  transform: scale(1.03);
+  filter: grayscale(0%) contrast(1.05);
 }
 .about-card-caption {
   position: absolute;
-  bottom: 12px; left: 12px;
-  background: rgba(24, 24, 24, 0.86);
-  backdrop-filter: blur(8px);
-  border-left: 2px solid var(--accent-lt);
-  padding: 6px 12px;
+  bottom: 9px;
+  left: 12px;
+  right: 12px;
   font-family: 'DM Mono', monospace;
-  font-size: 0.68rem;
-  letter-spacing: 0.1em;
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text-light);
-  transform: translateZ(24px);
+  color: #2b2b2b;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.about-card-caption::after {
+  content: '●';
+  color: var(--accent);
+  font-size: 0.55rem;
+}
+
+/* Collage card placements */
+.about-card-3d.collage-1 {
+  /* Top-left: Badminton action */
+  width: 54%;
+  top: 0%;
+  left: 0%;
+  --base-rot: -5.5deg;
+  z-index: 3;
+}
+.about-card-3d.collage-2 {
+  /* Top-right: Scrabble board */
+  width: 50%;
+  top: 3%;
+  right: 0%;
+  --base-rot: 6deg;
+  z-index: 4;
+}
+.about-card-3d.collage-3 {
+  /* Center focal Polaroid: Nimuthu portrait */
+  width: 44%;
+  top: 19%;
+  left: 27%;
+  --base-rot: -1.8deg;
+  z-index: 8;
+  padding: 12px 12px 38px 12px;
+  box-shadow: 0 28px 65px rgba(0, 0, 0, 0.62);
+}
+.about-card-3d.collage-4 {
+  /* Bottom-left: Scrabble Lanka Championship */
+  width: 48%;
+  bottom: 2%;
+  left: 2%;
+  --base-rot: 4.5deg;
+  z-index: 5;
+}
+.about-card-3d.collage-5 {
+  /* Bottom-right: Speaking on stage */
+  width: 50%;
+  bottom: 0%;
+  right: 1%;
+  --base-rot: -4.2deg;
+  z-index: 6;
 }
 
 /* ───── MOMENTS ───── */
@@ -1313,13 +1385,17 @@ footer {
   }
 
   .about-images {
-    grid-template-columns: 1fr;
+    min-height: 460px;
   }
-  .about-card-3d:first-child {
-    grid-column: auto;
+  .about-card-3d {
+    padding: 8px 8px 28px 8px;
   }
-  .about-card-3d img {
-    height: auto;
+  .about-card-3d.collage-3 {
+    padding: 9px 9px 30px 9px;
+  }
+  .about-card-caption {
+    font-size: 0.56rem;
+    bottom: 7px;
   }
 
   .projects-grid { grid-template-columns: 1fr; }
@@ -1367,6 +1443,9 @@ footer {
 }
 
 @media (max-width: 600px) {
+  .about-images {
+    min-height: 390px;
+  }
   .moments-grid {
     grid-template-columns: 1fr;
   }
@@ -1375,6 +1454,9 @@ footer {
 }
 
 @media (max-width: 420px) {
+  .about-images {
+    min-height: 340px;
+  }
   .hero-stats {
     grid-template-columns: 1fr;
   }
@@ -1481,20 +1563,30 @@ footer {
       </div>
     </div>
     <div class="about-images reveal-right">
-      <div class="about-card-3d tilt-3d" data-tilt-max="10">
+      <div class="about-card-3d collage-1 tilt-3d" data-tilt-max="10">
         <div class="tilt-glare"></div>
         <img src="images/badminton.jpg" data-cms-image="aboutImg1" alt="Badminton court action"/>
         <span class="about-card-caption">Court Agility · Badminton</span>
       </div>
-      <div class="about-card-3d tilt-3d" data-tilt-max="10">
+      <div class="about-card-3d collage-2 tilt-3d" data-tilt-max="10">
         <div class="tilt-glare"></div>
         <img src="images/scrabble.jpg" data-cms-image="aboutImg2" alt="Competitive Scrabble board"/>
         <span class="about-card-caption">Strategic Play · Scrabble</span>
       </div>
-      <div class="about-card-3d tilt-3d" data-tilt-max="10">
+      <div class="about-card-3d collage-3 tilt-3d" data-tilt-max="11">
         <div class="tilt-glare"></div>
         <img src="images/nimu_2.png" data-cms-image="aboutImg3" alt="Nimuthu portrait"/>
         <span class="about-card-caption">Engineering &amp; Leadership</span>
+      </div>
+      <div class="about-card-3d collage-4 tilt-3d" data-tilt-max="10">
+        <div class="tilt-glare"></div>
+        <img src="images/moment_scrabble_lanka_1.webp" data-cms-image="moment2" alt="Scrabble Lanka Championship"/>
+        <span class="about-card-caption">National Competitor</span>
+      </div>
+      <div class="about-card-3d collage-5 tilt-3d" data-tilt-max="10">
+        <div class="tilt-glare"></div>
+        <img src="images/moment_speaking.jpg" data-cms-image="moment4" alt="Speaking on stage"/>
+        <span class="about-card-caption">On Stage · Leadership</span>
       </div>
     </div>
   </div>
