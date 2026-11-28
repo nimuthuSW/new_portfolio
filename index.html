@@ -698,50 +698,109 @@ nav.scrolled {
 }
 .moments-heading em { font-style: italic; color: var(--accent); }
 .moments-grid {
-  display: grid;
-  grid-template-columns: 0.72fr 1fr 1fr;
-  gap: 1.3rem;
-  align-items: start;
+  position: relative;
+  width: 100%;
+  min-height: 700px;
   perspective: 1200px;
+  margin-top: 1rem;
 }
 .moment {
-  position: relative; overflow: hidden; margin: 0;
-  background: #181818; cursor: zoom-in;
-  box-shadow: 0 16px 36px rgba(30, 50, 30, 0.14);
-  border: 1px solid rgba(90, 138, 90, 0.22);
+  position: absolute;
+  margin: 0;
+  background: #fdfbf7;
+  padding: 12px 12px 16px 12px;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 22px 48px rgba(25, 45, 25, 0.24), 0 4px 12px rgba(0, 0, 0, 0.12);
+  cursor: zoom-in;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.45s ease, z-index 0s;
 }
-.moment:first-child { grid-row: span 2; }
-.moment:last-child { grid-column: span 2; }
+.moment::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  width: 64px;
+  height: 20px;
+  transform: translateX(-50%) rotate(1.5deg);
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(90, 138, 90, 0.22);
+  backdrop-filter: blur(2px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  z-index: 6;
+  pointer-events: none;
+}
 .moment img {
   width: 100%;
   height: auto;
   display: block;
   object-fit: contain;
-  filter: grayscale(15%);
-  transition: filter 0.4s, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  background: #181818;
+  filter: grayscale(10%) contrast(1.02);
+  transition: filter 0.4s ease;
+}
+.moment:hover, .moment:focus-visible {
+  z-index: 30 !important;
+  --tz: 28px;
+  box-shadow: 0 34px 72px rgba(20, 40, 20, 0.38), 0 0 0 2px var(--accent);
 }
 .moment:hover img, .moment:focus-visible img {
-  filter: grayscale(0%);
-  transform: scale(1.03);
+  filter: grayscale(0%) contrast(1.05);
 }
 .moment figcaption {
-  position: absolute; left: 0; right: 0; bottom: 0;
-  padding: 2.5rem 1.2rem 1.1rem;
-  background: linear-gradient(transparent, rgba(18,18,18,0.88));
-  color: var(--text-light);
-  font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.06em;
-  transform: translateY(100%) translateZ(22px);
-  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-  z-index: 5;
+  padding: 12px 4px 2px;
+  background: transparent;
+  color: #3a3a3a;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  line-height: 1.45;
+  transform: none;
 }
 .moment figcaption strong {
-  display: block; font-family: 'Syne', sans-serif; font-size: 1rem;
-  letter-spacing: 0; color: #fff; margin-bottom: 0.2rem;
+  display: block;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.96rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #181818;
+  margin-bottom: 2px;
 }
-.moment:hover figcaption, .moment:focus-visible figcaption {
-  transform: translateY(0) translateZ(22px);
+.moment:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+
+/* Moments Polaroid collage placements */
+.moment:nth-child(1) {
+  /* Portrait (Hello) — left focal Polaroid */
+  width: 30%;
+  top: 4%;
+  left: 1%;
+  --base-rot: -4.8deg;
+  z-index: 6;
 }
-.moment:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.moment:nth-child(2) {
+  /* Scrabble Lanka Championship 1 — top center */
+  width: 40%;
+  top: 0%;
+  left: 28%;
+  --base-rot: 3.4deg;
+  z-index: 5;
+}
+.moment:nth-child(3) {
+  /* Every tile counts — bottom center */
+  width: 40%;
+  bottom: 0%;
+  left: 24%;
+  --base-rot: -2.8deg;
+  z-index: 7;
+}
+.moment:nth-child(4) {
+  /* On the mic — right angled Polaroid */
+  width: 38%;
+  top: 18%;
+  right: 0%;
+  --base-rot: 5.2deg;
+  z-index: 8;
+}
 
 .lightbox {
   position: fixed; inset: 0; z-index: 2000;
@@ -1196,7 +1255,7 @@ footer {
 }
 .reveal.visible {
   opacity: 1;
-  transform: perspective(1000px) translate3d(0, 0, 0) rotateX(0deg);
+  transform: perspective(1100px) rotate(var(--base-rot, 0deg)) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translate3d(0, 0, var(--tz, 0px));
 }
 .reveal-left {
   opacity: 0;
@@ -1206,7 +1265,7 @@ footer {
 }
 .reveal-left.visible {
   opacity: 1;
-  transform: perspective(1000px) translate3d(0, 0, 0) rotateY(0deg);
+  transform: perspective(1100px) rotate(var(--base-rot, 0deg)) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translate3d(0, 0, var(--tz, 0px));
 }
 .reveal-right {
   opacity: 0;
@@ -1216,7 +1275,7 @@ footer {
 }
 .reveal-right.visible {
   opacity: 1;
-  transform: perspective(1000px) translate3d(0, 0, 0) rotateY(0deg);
+  transform: perspective(1100px) rotate(var(--base-rot, 0deg)) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translate3d(0, 0, var(--tz, 0px));
 }
 
 .delay-1 { transition-delay: 0.08s; }
@@ -1272,14 +1331,15 @@ footer {
   .edu-item::before { left: 175px; }
   .edu-item::after { left: 171px; }
   .moments-grid {
-    grid-template-columns: 1fr 1fr;
+    min-height: 580px;
   }
-  .moment:first-child { grid-row: span 1; }
-  .moment:nth-child(3) { grid-column: span 2; }
+  .moment:nth-child(1) { width: 36%; top: 2%; left: 1%; }
+  .moment:nth-child(2) { width: 52%; top: 0%; left: 39%; }
+  .moment:nth-child(3) { width: 50%; bottom: 3%; left: 6%; }
+  .moment:nth-child(4) { width: 50%; top: 44%; right: 1%; }
 }
 
 @media (hover: none) {
-  .moment figcaption { transform: translateY(0); }
   .hero-img-wrap { animation: fadeUp 0.9s ease forwards 0.3s, floatAmbient 6s ease-in-out infinite 1.2s; }
 }
 
@@ -1398,6 +1458,24 @@ footer {
     bottom: 7px;
   }
 
+  .moments-grid {
+    min-height: 520px;
+  }
+  .moment {
+    padding: 9px 9px 12px 9px;
+  }
+  .moment figcaption {
+    font-size: 0.6rem;
+    padding: 8px 2px 2px;
+  }
+  .moment figcaption strong {
+    font-size: 0.82rem;
+  }
+  .moment:nth-child(1) { width: 42%; top: 2%; left: 1%; }
+  .moment:nth-child(2) { width: 55%; top: 0%; left: 43%; }
+  .moment:nth-child(3) { width: 54%; bottom: 4%; left: 2%; }
+  .moment:nth-child(4) { width: 54%; bottom: 0%; right: 1%; top: auto; }
+
   .projects-grid { grid-template-columns: 1fr; }
   .project-body { padding: 1.5rem; }
   .achievements-grid { grid-template-columns: 1fr; }
@@ -1447,15 +1525,16 @@ footer {
     min-height: 390px;
   }
   .moments-grid {
-    grid-template-columns: 1fr;
+    min-height: 460px;
   }
-  .moment:first-child { grid-row: span 1; }
-  .moment:nth-child(3), .moment:last-child { grid-column: auto; }
 }
 
 @media (max-width: 420px) {
   .about-images {
     min-height: 340px;
+  }
+  .moments-grid {
+    min-height: 410px;
   }
   .hero-stats {
     grid-template-columns: 1fr;
